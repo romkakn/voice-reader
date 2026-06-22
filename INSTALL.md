@@ -12,14 +12,14 @@
 ## שלב א׳ — הורדה מ-GitHub ⬇️
 
 **אפשרות 1 — הורדת ZIP (הכי פשוט):**
-1. נכנסים לעמוד הפרויקט: REPO_URL_PLACEHOLDER
+1. נכנסים לעמוד הפרויקט: https://github.com/romkakn/voice-reader
 2. לוחצים על הכפתור הירוק **`Code`** ואז **`Download ZIP`**.
 3. מחלצים (Extract) את הקובץ שירד. מקבלים תיקייה בשם `voice-reader`.
 4. שמים את התיקייה במקום קבוע (למשל שולחן העבודה) — אל תמחקו אותה אחרי ההתקנה, הדפדפן טוען ממנה.
 
 **אפשרות 2 — למי שמכיר git:**
 ```bash
-git clone REPO_URL_PLACEHOLDER
+git clone https://github.com/romkakn/voice-reader
 ```
 
 ---
