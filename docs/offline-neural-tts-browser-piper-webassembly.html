@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="How Piper VITS and WebAssembly enable offline neural text-to-speech directly in your browser with Voice Reader chrome extension.">
-  <title>How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser</title>
+  <title>Offline Neural TTS: Piper & WebAssembly</title>
   <link rel="canonical" href="https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser">
+  <meta property="og:title" content="Offline Neural TTS: Piper & WebAssembly">
   <meta property="og:description" content="How Piper VITS and WebAssembly enable offline neural text-to-speech directly in your browser with Voice Reader chrome extension.">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html">
@@ -16,7 +16,7 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser">
+  <meta name="twitter:title" content="Offline Neural TTS: Piper & WebAssembly">
   <meta name="twitter:description" content="How Piper VITS and WebAssembly enable offline neural text-to-speech directly in your browser with Voice Reader chrome extension.">
   <meta name="twitter:image" content="https://romkakn.github.io/voice-reader/img/og-image.png">
 
@@ -206,138 +206,66 @@
   </header>
 
   <main>
-    <h1>How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser</h1>
+    <h1>How Piper VITS and WebAssembly power offline neural TTS in your browser</h1>
 
-    <p>Modern text-to-speech has moved beyond robotic, pre-recorded voices. Today, neural TTS engines like <strong>Piper</strong> deliver natural, human-like speech directly in your browser—no cloud, no subscription, no data leaving your device. In Voice Reader, we use Piper with WebAssembly to give you offline neural text-to-speech. Here's how it works.</p>
+    <img src="img/seo/offline-neural-tts-browser-piper-webassembly.svg" alt="offline neural TTS with Piper VITS and WebAssembly" width="1200" height="480" loading="lazy" style="width:100%;height:auto;border-radius:10px;margin:1rem 0">
 
-    <h2>What Is Piper?</h2>
+    <p>Your text shouldn't have to leave your device to be read aloud. Most browser TTS no cloud solutions either sound robotic or send every word you highlight to a remote server. Voice Reader takes a different approach: it runs Piper VITS through WebAssembly directly in Chrome, so speech synthesis happens on your CPU, not someone else's.</p>
 
-    <p><strong>Piper</strong> is an open-source neural text-to-speech engine built on <strong>VITS</strong> (Variational Inference Text-to-Speech), a fast, high-quality model architecture. Unlike older TTS systems that concatenate pre-recorded phonemes, VITS generates speech end-to-end from text, producing natural, expressive, and varied intonation.</p>
+    <h2>What Piper is</h2>
 
-    <p>Piper ships with models for multiple languages and voice presets. Each model runs as a single file (~50–75 MB for medium quality), making it portable and cacheable. This is why it's ideal for browser-based applications like <a href="./free-offline-tts-chrome-extension-no-account.html">free offline TTS extensions with no sign-up required</a>.</p>
+    <p>Piper is an open-source neural TTS engine built on VITS (Variational Inference Text-to-Speech), maintained by the Rhasspy project under an MIT license. VITS generates speech end-to-end from text in a single pass, rather than splicing together pre-recorded phonemes the way older engines do. The result is natural intonation and rhythm that concatenative systems can't match.</p>
 
-    <h2>WebAssembly: Bringing Neural TTS to the Browser</h2>
+    <p>Each Piper voice ships as a single ONNX model file. Medium-quality English voices weigh around 63 MB. That's small enough to cache in a browser but large enough to produce speech that doesn't sound like a 2005 GPS. The code is auditable, no hidden data collection anywhere in the pipeline, which is why it fits well in a <a href="./free-offline-tts-chrome-extension-no-account.html">free offline TTS extension with no account required</a>.</p>
 
-    <p>Piper's inference engine is written in C++, optimized for speed. To run it in a browser, we compile it to <strong>WebAssembly</strong> (WASM)—a bytecode format that browsers can execute at near-native speed. This allows Piper to synthesize speech locally on your device in seconds, not minutes.</p>
+    <h2>WebAssembly: how Piper runs in a browser</h2>
 
-    <h3>Why WebAssembly Matters</h3>
+    <p>Piper's inference engine is C++. To run it in Chrome without a native binary, we compile it to WebAssembly using ONNX Runtime WASM. The browser executes this bytecode at near-native speed, fast enough for real-time synthesis on any modern laptop or desktop.</p>
 
-    <ul>
-      <li><strong>Performance:</strong> Near-native speed means real-time TTS without lag</li>
-      <li><strong>Privacy:</strong> No network calls, no audio streaming through a server</li>
-      <li><strong>Offline:</strong> Works with zero internet after the first voice model download</li>
-      <li><strong>Portability:</strong> Single WASM binary works across all modern browsers (Chrome, Edge, Firefox, Safari)</li>
-    </ul>
+    <p>Three practical things follow from this. First, there are no network calls during synthesis, so your text never reaches a server. Second, the extension works on planes, in basements, anywhere without signal, once the model is cached. Third, the same WASM binary runs on Chrome, Edge, Brave, Opera, and Firefox without any platform-specific changes.</p>
 
-    <h2>How Voice Reader Uses Piper + WASM</h2>
+    <p>Voice Reader runs the Piper WASM engine inside a Manifest V3 offscreen document, which keeps synthesis off the main thread so the browser stays responsive while audio is generated.</p>
 
-    <p>Voice Reader integrates Piper via WebAssembly to offer a <a href="./privacy-tts-extension-no-data-cloud.html">privacy-first text-to-speech extension that sends zero data to the cloud</a>. Here's the flow:</p>
+    <h2>How Voice Reader uses Piper + WASM</h2>
 
     <ol>
-      <li><strong>Select text</strong> on any webpage and right-click → Read</li>
-      <li><strong>Choose engine:</strong> Auto (Piper + fallback), Neural (Piper only), or System (Web Speech API)</li>
-      <li><strong>Download voice model:</strong> On first use, the selected Piper voice model (~63–75 MB) is fetched from HuggingFace and cached in your browser's Origin Private File System (OPFS)</li>
-      <li><strong>Synthesize locally:</strong> Piper's WASM engine generates speech on your device in real-time</li>
-      <li><strong>Play audio:</strong> Listen through your speakers or headphones, control playback with the floating bar</li>
-      <li><strong>Subsequent reads:</strong> 100% offline—no download needed, instant playback</li>
+      <li>Select text on any webpage and right-click → Read.</li>
+      <li>Choose an engine mode: Auto (Piper with fallback), Neural (Piper only), or System (Web Speech API).</li>
+      <li>On first use, the selected Piper voice model downloads from HuggingFace and gets stored in your browser's Origin Private File System (OPFS), a sandboxed local storage area the extension can access without any cloud sync.</li>
+      <li>Piper's WASM engine synthesizes speech from your text on-device.</li>
+      <li>Audio plays through your speakers. The floating bar lets you pause, skip, or adjust speed.</li>
+      <li>Every read after that first download runs fully offline. No requests leave the browser.</li>
     </ol>
 
-    <h2>VITS: The Neural Model Behind the Voice</h2>
+    <h2>First-run download and caching</h2>
 
-    <p>Piper uses <strong>VITS</strong>, a state-of-the-art neural vocoder that:</p>
+    <p>The initial download of a medium-quality Piper voice takes 30 seconds to 2 minutes depending on connection speed. The ~63 MB ONNX model file goes into OPFS and stays there until you clear extension data. No HuggingFace account is needed. Once cached, the voice loads from local storage in under a second.</p>
 
-    <ul>
-      <li>Converts text → linguistic features → mel-spectrogram → waveform</li>
-      <li>Learns prosody (pitch, stress, intonation) from training data</li>
-      <li>Runs inference in milliseconds, not seconds</li>
-      <li>Produces high-quality, natural-sounding speech with proper emphasis and rhythm</li>
-    </ul>
+    <p>If you switch to a different voice ID, that voice downloads once on first use, then caches the same way. Most browsers allocate at least 50 GB of OPFS quota, so storing several voices isn't a problem in practice.</p>
 
-    <p>Unlike older concatenative TTS (which splices together phoneme recordings), VITS generates speech continuously, allowing for fluid, expressive output that sounds more human.</p>
+    <h2>Engine modes and fallback behavior</h2>
 
-    <h2>First-Run Download and Caching</h2>
+    <h3>Auto (default)</h3>
+    <p>Tries Piper first. If the ONNX model fails to load or WebAssembly isn't supported, falls back to the system's Web Speech API voices. Good for most users who want the best available voice without thinking about it.</p>
 
-    <p>The first time you use a Piper voice, Voice Reader downloads the model file from HuggingFace (no account required). The file is stored in your browser's <strong>Origin Private File System</strong> (OPFS), a secure, persistent storage sandbox available in all modern browsers.</p>
-
-    <ul>
-      <li><strong>Size:</strong> 63–75 MB per voice (varies by quality tier)</li>
-      <li><strong>Download time:</strong> 30 seconds to 2 minutes (depends on internet speed)</li>
-      <li><strong>Storage:</strong> Persistent until you clear browser cache or extension data</li>
-      <li><strong>Privacy:</strong> Stored locally on your device; never synced to the cloud or HuggingFace</li>
-    </ul>
-
-    <p>After the model is cached, all subsequent reads are <strong>fully offline and near-instant</strong>—Voice Reader doesn't need to fetch anything from the internet.</p>
-
-    <h2>Engine Modes and Fallback Behavior</h2>
-
-    <p>Voice Reader offers three engine modes to suit your needs:</p>
-
-    <h3>Auto (Default)</h3>
-    <p>Tries Piper neural TTS first. If the voice model fails to download or WebAssembly isn't supported, falls back to the system's Web Speech API voices. This provides the best user experience with neural voices when possible.</p>
-
-    <h3>Neural (Piper Only)</h3>
-    <p>Always uses Piper. If the model can't load, an error message is shown instead of falling back. Useful if you want guaranteed consistency and don't want system voices used as a backup.</p>
+    <h3>Neural (Piper only)</h3>
+    <p>Always uses Piper. If the model can't load, you see an error rather than a silent fallback. Use this mode when you need consistent voice output and don't want the system voices substituting in.</p>
 
     <h3>System (Web Speech API)</h3>
-    <p>Uses your browser's native Web Speech API voices (the original Voice Reader behavior). No model download, no WASM overhead—instant playback with your system's built-in voices. Learn more about this approach in our guide on <a href="./how-to-make-chrome-read-text-aloud.html">how to make Chrome read text out loud</a>.</p>
+    <p>Uses your browser's built-in voices. No model download, no WASM overhead, instant playback. The tradeoff is voice quality and the fact that some system voices do phone home depending on your OS. Details in our guide on <a href="./how-to-make-chrome-read-text-aloud.html">how to make Chrome read text out loud</a>.</p>
 
-    <h2>Offline Workflow: Zero Internet After Setup</h2>
+    <h2>Switching voices and models</h2>
 
-    <p>Once a voice model is cached, Voice Reader works entirely offline:</p>
-
-    <ol>
-      <li>Select text on a webpage (offline or online)</li>
-      <li>Right-click → Read (Explanatory or Storytelling)</li>
-      <li>Piper's WASM engine synthesizes speech from text on your device</li>
-      <li>Audio plays locally</li>
-      <li>No network request is made</li>
-    </ol>
-
-    <p>This makes Voice Reader ideal for airplane mode, rural areas, or anyone concerned about data usage or eavesdropping.</p>
-
-    <h2>Why This Matters for Accessibility</h2>
-
-    <p>Neural TTS powered by Piper and WebAssembly has profound implications for accessibility. Users with dyslexia or reading difficulties can now listen to text with natural, expressive voices—without worrying about data collection or cloud processing. Voice Reader's approach ensures <a href="./tts-extension-dyslexia-accessibility-reading-difficulty.html">read-aloud support for dyslexia and reading difficulties</a> that respects privacy and works offline.</p>
-
-    <h2>Performance and Compatibility</h2>
-
-    <h3>Browser Support</h3>
-    <ul>
-      <li><strong>Chrome/Edge:</strong> Full support (WebAssembly + OPFS)</li>
-      <li><strong>Brave:</strong> Full support</li>
-      <li><strong>Opera:</strong> Full support</li>
-      <li><strong>Firefox:</strong> Full support (OPFS available)</li>
-      <li><strong>Safari:</strong> Limited support (OPFS arriving in iOS/macOS 17.4+)</li>
-    </ul>
-
-    <h3>System Requirements</h3>
-    <ul>
-      <li><strong>CPU:</strong> Modern multi-core processor (synthesizes 1–2 seconds of audio per second)</li>
-      <li><strong>RAM:</strong> ~200–300 MB per active model in memory</li>
-      <li><strong>Storage:</strong> Browser cache with at least 100 MB available</li>
-    </ul>
-
-    <h2>Switching Voices and Models</h2>
-
-    <p>Voice Reader includes dozens of Piper voice models across multiple languages and quality tiers:</p>
-
-    <ul>
-      <li><strong>English:</strong> 20+ voice IDs (male, female, various accents)</li>
-      <li><strong>Spanish, French, German, Italian, Portuguese:</strong> Multiple voices each</li>
-      <li><strong>Quality tiers:</strong> Low (16 MB), medium (63–75 MB), high (120+ MB)</li>
-    </ul>
-
-    <p>To switch voices:</p>
+    <p>Voice Reader ships with dozens of Piper voices across English (20+ IDs covering different accents and genders), Spanish, French, German, Italian, Portuguese, and more. Quality tiers run from 16 MB low to 63-75 MB medium to 120+ MB high. To switch:</p>
 
     <ol>
-      <li>Click the Voice Reader icon → <strong>Options</strong></li>
-      <li>Under <strong>Engine</strong>, select <strong>Neural (Piper)</strong></li>
-      <li>Under <strong>Neural voice</strong>, choose your preferred voice ID</li>
-      <li>Click <strong>Save</strong></li>
-      <li>Next time you read, the new voice will be used (model downloads on first use)</li>
+      <li>Click the Voice Reader icon → Options.</li>
+      <li>Set Engine to Neural (Piper).</li>
+      <li>Pick a voice ID from the Neural voice dropdown.</li>
+      <li>Save. The new voice downloads on next use.</li>
     </ol>
 
-    <h2>Comparison: Piper vs. Cloud TTS vs. System Voices</h2>
+    <h2>Comparison: Piper vs. cloud TTS vs. system voices</h2>
 
     <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
       <thead>
@@ -345,13 +273,13 @@
           <th style="text-align: left; padding: 10px;">Aspect</th>
           <th style="text-align: left; padding: 10px;">Piper (WASM)</th>
           <th style="text-align: left; padding: 10px;">Cloud TTS</th>
-          <th style="text-align: left; padding: 10px;">System Voices</th>
+          <th style="text-align: left; padding: 10px;">System voices</th>
         </tr>
       </thead>
       <tbody>
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 10px;">Quality</td>
-          <td style="padding: 10px;">High (neural)</td>
+          <td style="padding: 10px;">High (neural VITS)</td>
           <td style="padding: 10px;">Very high (premium)</td>
           <td style="padding: 10px;">Medium (pre-recorded)</td>
         </tr>
@@ -364,74 +292,89 @@
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 10px;">Cost</td>
           <td style="padding: 10px;">Free</td>
-          <td style="padding: 10px;">$0.003–0.02 per 1K chars</td>
+          <td style="padding: 10px;">$0.003-0.02 per 1K chars</td>
           <td style="padding: 10px;">Free</td>
         </tr>
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 10px;">Privacy</td>
-          <td style="padding: 10px;">Excellent (local only)</td>
-          <td style="padding: 10px;">Poor (sent to server)</td>
-          <td style="padding: 10px;">Excellent (local only)</td>
+          <td style="padding: 10px;">Local only</td>
+          <td style="padding: 10px;">Text sent to server</td>
+          <td style="padding: 10px;">Local only (usually)</td>
         </tr>
         <tr style="border-bottom: 1px solid #eee;">
           <td style="padding: 10px;">Voice variety</td>
-          <td style="padding: 10px;">Good (100+ voices)</td>
-          <td style="padding: 10px;">Excellent (500+ voices)</td>
-          <td style="padding: 10px;">Limited (OS-dependent)</td>
+          <td style="padding: 10px;">100+ voices</td>
+          <td style="padding: 10px;">500+ voices</td>
+          <td style="padding: 10px;">Depends on OS</td>
         </tr>
         <tr>
           <td style="padding: 10px;">Setup</td>
-          <td style="padding: 10px;">Install extension, download model</td>
+          <td style="padding: 10px;">Install extension, download model once</td>
           <td style="padding: 10px;">API key + payment method</td>
           <td style="padding: 10px;">Install extension, instant</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>The Open-Source Advantage</h2>
+    <h2>Why this matters for accessibility</h2>
 
-    <p>Piper is open-source (MIT license), maintained by Rhasspy. This means:</p>
+    <p>Users with dyslexia, low vision, or reading fatigue need reliable read-aloud support, not a tool that breaks when there's no wifi or stops working after a free-tier limit. Piper running offline through WebAssembly means the voice is always available, sounds natural, and never processes your text on a third-party server. That's the case made for <a href="./tts-extension-dyslexia-accessibility-reading-difficulty.html">read-aloud support for dyslexia and reading difficulties</a> that also respects privacy.</p>
 
-    <ul>
-      <li>The code is transparent—no hidden data collection</li>
-      <li>Community-contributed voices expand the library constantly</li>
-      <li>You can train your own voice models and use them with Voice Reader</li>
-      <li>No vendor lock-in—if Piper development slows, alternatives exist</li>
-    </ul>
+    <h2>Performance and browser support</h2>
 
-    <h2>Limitations and Future Work</h2>
+    <p>Chrome, Edge, Brave, and Opera all support WebAssembly + OPFS fully. Firefox works. Safari has partial OPFS support from iOS/macOS 17.4 onward. On the hardware side, expect the WASM engine to synthesize roughly 1-2 seconds of audio per second of real time on a modern multi-core CPU, with about 200-300 MB RAM used while a model is loaded.</p>
+
+    <h2>Known limitations</h2>
 
     <ul>
-      <li><strong>Model size:</strong> 63–75 MB per voice can be large on mobile; future compression is planned</li>
-      <li><strong>OPFS quota:</strong> Most browsers allow 50+ GB; clearing cache frees cached models</li>
-      <li><strong>Streaming:</strong> Current Piper requires the entire text upfront; streaming synthesis is in development</li>
-      <li><strong>Prosody control:</strong> Limited ability to adjust emphasis or emotion (but System voices allow fine-grained pitch/rate control)</li>
+      <li>Piper requires the full text block before it starts generating; streaming synthesis sentence-by-sentence is not yet implemented.</li>
+      <li>Prosody control (adjusting emphasis or emotional tone) is limited compared to cloud providers; the System mode gives you finer pitch and rate control through Web Speech API.</li>
+      <li>The 63 MB model size is manageable on desktop but can feel heavy on lower-storage devices.</li>
     </ul>
 
-    <h2>Getting Started with Voice Reader's Neural TTS</h2>
+    <h2>Getting started</h2>
 
     <ol>
-      <li><a href="./install-unpacked-chrome-extension-developer-mode.html">Install Voice Reader</a> as an unpacked extension</li>
-      <li>Open extension options → Engine → Neural (Piper)</li>
-      <li>Choose your preferred voice (or leave on Auto)</li>
-      <li>Select text on any webpage and right-click → Read</li>
-      <li>The first voice download takes 30 seconds to 2 minutes; subsequent reads are instant and offline</li>
+      <li><a href="./install-unpacked-chrome-extension-developer-mode.html">Install Voice Reader</a> as an unpacked extension.</li>
+      <li>Open extension options, set Engine to Neural (Piper), pick a voice.</li>
+      <li>Select text on any page and right-click → Read.</li>
+      <li>Wait 30-120 seconds for the first voice download. Every read after that is instant and offline.</li>
     </ol>
 
-    <p><strong>No account, no subscription, no data collection.</strong> Your voice, your device, your data.</p>
+    <p>No account. No subscription. No data collection. The text stays on your device from the moment you highlight it to the moment you hear it.</p>
+
+    <h2>FAQ</h2>
+
+    <h3>What is Piper TTS?</h3>
+    <p>Piper is an open-source neural TTS engine built on VITS. It generates speech on-device without cloud processing. The Rhasspy project maintains it under an MIT license.</p>
+
+    <h3>Does Piper TTS work offline?</h3>
+    <p>Yes. After one download (30 seconds to 2 minutes), it runs entirely through WebAssembly on your device. No internet needed for any subsequent read.</p>
+
+    <h3>How much data does Piper TTS send to the cloud?</h3>
+    <p>Zero. Text and audio never leave the browser. The only network call is the one-time model download from HuggingFace.</p>
+
+    <h3>How do I switch Piper voices?</h3>
+    <p>Open Voice Reader options, select Neural (Piper) as the engine, choose a voice ID, and save. The new voice downloads on next use.</p>
+
+    <h3>Can I use Piper on mobile?</h3>
+    <p>Voice Reader is a Chrome extension for desktop (Windows, Mac, Linux). Chrome extensions don't run on mobile Chrome.</p>
+
+    <h3>Is Piper better than my browser's built-in voices?</h3>
+    <p>For most system voices, yes: Piper's VITS model produces better prosody and more natural rhythm. If you want zero setup time and don't care about voice quality, System mode is faster to start. Auto mode gives you Piper when the model is cached and falls back to system voices if it isn't.</p>
 
     <div class="related-guides">
       <h3>Related guides</h3>
       <ul>
-        <li><a href="./free-offline-tts-chrome-extension-no-account.html">Best Free Text to Speech Chrome Extension With No Account or Subscription</a></li>
-        <li><a href="./privacy-tts-extension-no-data-cloud.html">The Privacy-First TTS Browser Extension That Sends Zero Data to the Cloud</a></li>
-        <li><a href="./tts-extension-dyslexia-accessibility-reading-difficulty.html">The Best Free Read Aloud Extension for Dyslexia and Reading Difficulties</a></li>
+        <li><a href="./free-offline-tts-chrome-extension-no-account.html">Best free text to speech Chrome extension with no account or subscription</a></li>
+        <li><a href="./privacy-tts-extension-no-data-cloud.html">The privacy-first TTS browser extension that sends zero data to the cloud</a></li>
+        <li><a href="./tts-extension-dyslexia-accessibility-reading-difficulty.html">The best free read aloud extension for dyslexia and reading difficulties</a></li>
       </ul>
     </div>
   </main>
 
   <footer>
-    <p>Voice Reader is a free, open-source Chrome extension. <a href="https://github.com/romkakn/voice-reader">View on GitHub</a> • <a href="./index.html">Install free</a></p>
+    <p>Voice Reader is a free, open-source Chrome extension. <a href="https://github.com/romkakn/voice-reader">View on GitHub</a> &bull; <a href="./index.html">Install free</a></p>
   </footer>
 
   <script type="application/ld+json">
@@ -442,16 +385,21 @@
         "@type": "Article",
         "headline": "How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser",
         "description": "How Piper VITS and WebAssembly enable offline neural text-to-speech directly in your browser with Voice Reader chrome extension.",
+        "datePublished": "2026-06-22",
+        "dateModified": "2026-06-22",
+        "inLanguage": "en-US",
         "author": {
           "@type": "Organization",
-          "name": "Voice Reader"
+          "name": "Voice Reader",
+          "url": "https://romkakn.github.io/voice-reader"
         },
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html"
+        "publisher": {
+          "@type": "Organization",
+          "name": "Voice Reader",
+          "url": "https://romkakn.github.io/voice-reader"
         },
-        "datePublished": "2024-01-01",
-        "dateModified": "2024-01-01"
+        "mainEntityOfPage": "https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html",
+        "image": "https://romkakn.github.io/voice-reader/img/seo/offline-neural-tts-browser-piper-webassembly.svg"
       },
       {
         "@type": "FAQPage",
@@ -477,7 +425,7 @@
             "name": "How much data does Piper TTS send to the cloud?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Zero. Piper runs entirely on your device using WebAssembly. Your text and audio never leave your browser—no cloud processing, no data collection."
+              "text": "Zero. Piper runs entirely on your device using WebAssembly. Your text and audio never leave your browser — no cloud processing, no data collection."
             }
           },
           {

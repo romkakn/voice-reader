@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#fffbf0"/>
+  <!-- Document panel -->
+  <rect x="100" y="70" width="620" height="340" rx="12" fill="#fff" stroke="#e0c97b" stroke-width="2"/>
+  <!-- Title line -->
+  <rect x="130" y="100" width="300" height="18" rx="4" fill="#f0e6b8"/>
+  <!-- Text lines with one word highlighted per line -->
+  <rect x="130" y="140" width="80" height="16" rx="3" fill="#ffd166"/>
+  <rect x="220" y="140" width="100" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="330" y="140" width="130" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="470" y="140" width="90" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="570" y="140" width="110" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="130" y="170" width="130" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="270" y="170" width="90" height="16" rx="3" fill="#ffd166"/>
+  <rect x="370" y="170" width="110" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="490" y="170" width="80" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="580" y="170" width="100" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="130" y="200" width="100" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="240" y="200" width="120" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="370" y="200" width="80" height="16" rx="3" fill="#ffd166"/>
+  <rect x="460" y="200" width="140" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="130" y="230" width="110" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="250" y="230" width="90" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="350" y="230" width="110" height="16" rx="3" fill="#f0e6d0"/>
+  <rect x="470" y="230" width="80" height="16" rx="3" fill="#ffd166"/>
+  <!-- Speaker icon -->
+  <rect x="130" y="280" width="18" height="40" rx="3" fill="#e0a800"/>
+  <polygon points="148,280 172,264 172,336 148,320" fill="#e0a800"/>
+  <path d="M178 288 Q190 300 178 312" fill="none" stroke="#e0a800" stroke-width="3" stroke-linecap="round"/>
+  <!-- Progress bar -->
+  <rect x="130" y="340" width="450" height="10" rx="5" fill="#f0e6b8"/>
+  <rect x="130" y="340" width="160" height="10" rx="5" fill="#ffd166"/>
+  <circle cx="290" cy="345" r="7" fill="#e0a800"/>
+  <!-- Speed control -->
+  <text x="200" y="378" font-family="Arial,sans-serif" font-size="13" fill="#888">0.5x</text>
+  <text x="290" y="378" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#e0a800">1.0x</text>
+  <text x="380" y="378" font-family="Arial,sans-serif" font-size="13" fill="#888">2.0x</text>
+  <!-- Right panel: focus beam effect -->
+  <rect x="760" y="70" width="340" height="340" rx="12" fill="#fffef5" stroke="#ffd166" stroke-width="2"/>
+  <!-- Dimmed text above -->
+  <rect x="790" y="100" width="260" height="60" rx="4" fill="#f5ead8" opacity="0.4"/>
+  <!-- Focus line -->
+  <rect x="780" y="175" width="300" height="42" rx="6" fill="#ffd166" opacity="0.3"/>
+  <rect x="790" y="183" width="80" height="26" rx="4" fill="#ffd166"/>
+  <rect x="880" y="183" width="100" height="26" rx="4" fill="#f5ead8"/>
+  <rect x="990" y="183" width="70" height="26" rx="4" fill="#f5ead8"/>
+  <!-- Dimmed text below -->
+  <rect x="790" y="235" width="260" height="60" rx="4" fill="#f5ead8" opacity="0.4"/>
+  <text x="930" y="330" font-family="Arial,sans-serif" font-size="13" fill="#888" text-anchor="middle">Focus Reading Mode</text>
+  <text x="600" y="450" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#6b4c00" text-anchor="middle">TTS with Word Highlighting &amp; Focus Reading Mode</text>
+</svg>

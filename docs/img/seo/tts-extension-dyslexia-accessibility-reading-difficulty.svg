@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#f5f0ff"/>
+  <!-- Open book -->
+  <g transform="translate(80,90)">
+    <rect x="20" y="40" width="380" height="260" rx="8" fill="#fff" stroke="#c5b3e6" stroke-width="2"/>
+    <!-- Book spine -->
+    <rect x="208" y="40" width="6" height="260" fill="#c5b3e6"/>
+    <!-- Left page: jumbled letters -->
+    <text x="50" y="110" font-family="Arial,sans-serif" font-size="24" fill="#d4b5f0" transform="rotate(-8,50,110)">d</text>
+    <text x="80" y="105" font-family="Arial,sans-serif" font-size="24" fill="#d4b5f0" transform="rotate(5,80,105)">b</text>
+    <text x="110" y="115" font-family="Arial,sans-serif" font-size="24" fill="#d4b5f0" transform="rotate(-4,110,115)">p</text>
+    <text x="140" y="108" font-family="Arial,sans-serif" font-size="24" fill="#d4b5f0" transform="rotate(7,140,108)">q</text>
+    <text x="50" y="155" font-family="Arial,sans-serif" font-size="16" fill="#e8d5f8" transform="rotate(-3,50,155)">Reading is hard...</text>
+    <rect x="40" y="175" width="150" height="12" rx="3" fill="#e8d5f8"/>
+    <rect x="40" y="198" width="130" height="12" rx="3" fill="#e8d5f8"/>
+    <rect x="40" y="221" width="140" height="12" rx="3" fill="#e8d5f8"/>
+    <!-- Right page: clear with highlight -->
+    <text x="230" y="110" font-family="Arial,sans-serif" font-size="24" fill="#7c4dbe">d</text>
+    <text x="260" y="110" font-family="Arial,sans-serif" font-size="24" fill="#7c4dbe">b</text>
+    <text x="290" y="110" font-family="Arial,sans-serif" font-size="24" fill="#7c4dbe">p</text>
+    <text x="320" y="110" font-family="Arial,sans-serif" font-size="24" fill="#7c4dbe">q</text>
+    <rect x="226" y="165" width="180" height="18" rx="4" fill="#ffd166" opacity="0.5"/>
+    <rect x="226" y="165" width="60" height="18" rx="4" fill="#ffd166"/>
+    <rect x="226" y="193" width="180" height="12" rx="3" fill="#e8d5f8"/>
+    <rect x="226" y="215" width="150" height="12" rx="3" fill="#e8d5f8"/>
+    <rect x="226" y="237" width="165" height="12" rx="3" fill="#e8d5f8"/>
+  </g>
+  <!-- Arrow transform -->
+  <path d="M510 220 L600 220" fill="none" stroke="#7c4dbe" stroke-width="3"/>
+  <polygon points="600,213 618,220 600,227" fill="#7c4dbe"/>
+  <!-- Speaker / ear icon -->
+  <circle cx="720" cy="220" r="100" fill="#ede7f6" stroke="#7c4dbe" stroke-width="2.5"/>
+  <!-- Ear shape -->
+  <path d="M690 180 Q660 180 660 220 Q660 265 695 265 Q700 265 700 255 Q680 255 680 220 Q680 193 700 190 Q730 185 740 210 Q748 235 730 250 Q718 260 718 275" fill="none" stroke="#7c4dbe" stroke-width="5" stroke-linecap="round"/>
+  <!-- Sound dot in ear -->
+  <circle cx="700" cy="220" r="7" fill="#7c4dbe"/>
+  <!-- Accessibility symbol -->
+  <circle cx="850" cy="140" r="36" fill="#7c4dbe"/>
+  <circle cx="850" cy="122" r="11" fill="#fff"/>
+  <line x1="850" y1="133" x2="850" y2="162" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  <line x1="826" y1="148" x2="874" y2="148" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <line x1="850" y1="162" x2="834" y2="183" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <line x1="850" y1="162" x2="866" y2="183" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  <!-- Labels -->
+  <text x="600" y="410" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#3a1870" text-anchor="middle">TTS Extension for Dyslexia &amp; Reading Difficulty</text>
+  <text x="600" y="440" font-family="Arial,sans-serif" font-size="14" fill="#888" text-anchor="middle">Listen instead of struggle — accessible reading for everyone</text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#f0fbff"/>
+  <!-- Left: Paid / lock -->
+  <rect x="80" y="100" width="340" height="280" rx="16" fill="#fff" stroke="#ef476f" stroke-width="2.5"/>
+  <rect x="80" y="100" width="340" height="60" rx="16" fill="#ef476f"/>
+  <rect x="80" y="140" width="340" height="20" fill="#ef476f"/>
+  <text x="250" y="138" font-family="Arial,sans-serif" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">Speechify</text>
+  <!-- Price tag -->
+  <rect x="150" y="200" width="200" height="50" rx="10" fill="#ffe8e8" stroke="#ef476f" stroke-width="1.5"/>
+  <text x="250" y="220" font-family="Arial,sans-serif" font-size="14" fill="#ef476f" text-anchor="middle" font-weight="bold">$139 / year</text>
+  <text x="250" y="240" font-family="Arial,sans-serif" font-size="12" fill="#ef476f" text-anchor="middle">Account required</text>
+  <!-- Lock icon -->
+  <rect x="220" y="275" width="60" height="50" rx="8" fill="#ef476f"/>
+  <path d="M230 275 Q230 248 250 248 Q270 248 270 275" fill="none" stroke="#ef476f" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="250" cy="296" r="8" fill="#fff"/>
+  <!-- VS badge -->
+  <circle cx="500" cy="240" r="50" fill="#ffd166"/>
+  <text x="500" y="248" font-family="Arial,sans-serif" font-size="22" font-weight="bold" fill="#6b4c00" text-anchor="middle">VS</text>
+  <!-- Right: Free / Voice Reader -->
+  <rect x="680" y="100" width="440" height="280" rx="16" fill="#fff" stroke="#06d6a0" stroke-width="2.5"/>
+  <rect x="680" y="100" width="440" height="60" rx="16" fill="#06d6a0"/>
+  <rect x="680" y="140" width="440" height="20" fill="#06d6a0"/>
+  <text x="900" y="138" font-family="Arial,sans-serif" font-size="17" font-weight="bold" fill="#fff" text-anchor="middle">Voice Reader</text>
+  <!-- Free badge -->
+  <rect x="770" y="200" width="260" height="50" rx="10" fill="#e8fef0" stroke="#06d6a0" stroke-width="1.5"/>
+  <text x="900" y="220" font-family="Arial,sans-serif" font-size="16" fill="#06d6a0" text-anchor="middle" font-weight="bold">Free Forever</text>
+  <text x="900" y="240" font-family="Arial,sans-serif" font-size="12" fill="#06d6a0" text-anchor="middle">No account · Offline · Private</text>
+  <!-- Checkmarks -->
+  <circle cx="785" cy="280" r="14" fill="#06d6a0"/>
+  <polyline points="778,280 783,287 793,272" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="805" y="285" font-family="Arial,sans-serif" font-size="13" fill="#2d6a4f">Neural TTS</text>
+  <circle cx="900" cy="280" r="14" fill="#06d6a0"/>
+  <polyline points="893,280 898,287 908,272" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="920" y="285" font-family="Arial,sans-serif" font-size="13" fill="#2d6a4f">Highlighting</text>
+  <circle cx="785" cy="320" r="14" fill="#06d6a0"/>
+  <polyline points="778,320 783,327 793,312" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="805" y="325" font-family="Arial,sans-serif" font-size="13" fill="#2d6a4f">Offline</text>
+  <circle cx="900" cy="320" r="14" fill="#06d6a0"/>
+  <polyline points="893,320 898,327 908,312" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="920" y="325" font-family="Arial,sans-serif" font-size="13" fill="#2d6a4f">Private</text>
+  <text x="600" y="430" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#006644" text-anchor="middle">Free Speechify Alternative for Chrome</text>
+  <text x="600" y="458" font-family="Arial,sans-serif" font-size="14" fill="#888" text-anchor="middle">Same features. Zero cost. No account needed.</text>
+</svg>

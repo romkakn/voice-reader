@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#f0f8ff"/>
+  <!-- Shield -->
+  <path d="M420 80 L780 80 L820 180 L820 280 Q820 380 600 440 Q380 380 380 280 L380 180 Z" fill="#e8eeff" stroke="#6c7ef7" stroke-width="3"/>
+  <!-- Lock inside shield -->
+  <rect x="545" y="230" width="110" height="90" rx="10" fill="#6c7ef7"/>
+  <path d="M560 230 Q560 180 600 180 Q640 180 640 230" fill="none" stroke="#6c7ef7" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="600" cy="270" r="12" fill="#fff"/>
+  <rect x="596" y="270" width="8" height="20" rx="4" fill="#fff"/>
+  <!-- Checkmark label -->
+  <text x="600" y="370" font-family="Arial,sans-serif" font-size="15" fill="#3a4080" text-anchor="middle" font-weight="bold">Zero Data Sent</text>
+  <!-- Cloud with X on right -->
+  <ellipse cx="1000" cy="200" rx="120" ry="60" fill="#ffe8e8" stroke="#ef476f" stroke-width="2.5"/>
+  <ellipse cx="960" cy="185" rx="55" ry="45" fill="#ffe8e8"/>
+  <ellipse cx="1030" cy="180" rx="45" ry="38" fill="#ffe8e8"/>
+  <!-- X mark -->
+  <line x1="955" y1="175" x2="1045" y2="225" stroke="#ef476f" stroke-width="6" stroke-linecap="round"/>
+  <line x1="1045" y1="175" x2="955" y2="225" stroke="#ef476f" stroke-width="6" stroke-linecap="round"/>
+  <!-- Dashed arrow blocked -->
+  <path d="M830 240 L920 240" fill="none" stroke="#ef476f" stroke-width="2.5" stroke-dasharray="6 4"/>
+  <polygon points="920,233 938,240 920,247" fill="#ef476f"/>
+  <rect x="872" y="228" width="24" height="24" rx="4" fill="#ef476f"/>
+  <line x1="878" y1="234" x2="890" y2="246" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="890" y1="234" x2="878" y2="246" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Left side: text stays local -->
+  <rect x="100" y="160" width="260" height="130" rx="10" fill="#fff" stroke="#b0c4de" stroke-width="1.5"/>
+  <rect x="120" y="180" width="200" height="12" rx="3" fill="#dde3f0"/>
+  <rect x="120" y="202" width="170" height="12" rx="3" fill="#dde3f0"/>
+  <rect x="120" y="224" width="190" height="12" rx="3" fill="#dde3f0"/>
+  <text x="230" y="268" font-family="Arial,sans-serif" font-size="13" fill="#06d6a0" text-anchor="middle" font-weight="bold">Stays on your device</text>
+  <path d="M362 240 L418 240" fill="none" stroke="#06d6a0" stroke-width="2.5"/>
+  <polygon points="418,233 435,240 418,247" fill="#06d6a0"/>
+  <text x="600" y="460" font-family="Arial,sans-serif" font-size="19" font-weight="bold" fill="#1a2366" text-anchor="middle">Privacy-First TTS — Zero Data to Cloud</text>
+</svg>

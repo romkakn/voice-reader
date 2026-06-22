@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#f8f0ff"/>
+  <!-- Step 1: Toggle developer mode -->
+  <rect x="80" y="90" width="280" height="160" rx="10" fill="#fff" stroke="#b39ddb" stroke-width="2"/>
+  <text x="220" y="120" font-family="Arial,sans-serif" font-size="13" fill="#555" text-anchor="middle">chrome://extensions</text>
+  <rect x="110" y="135" width="160" height="20" rx="4" fill="#ede7f6"/>
+  <text x="190" y="150" font-family="Arial,sans-serif" font-size="11" fill="#6c5fa0" text-anchor="middle">Developer mode</text>
+  <!-- Toggle ON -->
+  <rect x="278" y="136" width="42" height="18" rx="9" fill="#6c7ef7"/>
+  <circle cx="311" cy="145" r="8" fill="#fff"/>
+  <text x="220" y="200" font-family="Arial,sans-serif" font-size="28" fill="#6c5fa0" text-anchor="middle">①</text>
+  <text x="220" y="228" font-family="Arial,sans-serif" font-size="12" fill="#888" text-anchor="middle">Enable Dev Mode</text>
+  <!-- Arrow -->
+  <path d="M365 170 L445 170" fill="none" stroke="#b39ddb" stroke-width="2.5"/>
+  <polygon points="445,163 460,170 445,177" fill="#b39ddb"/>
+  <!-- Step 2: Folder / zip -->
+  <rect x="460" y="90" width="280" height="160" rx="10" fill="#fff" stroke="#b39ddb" stroke-width="2"/>
+  <!-- Folder icon -->
+  <rect x="530" y="130" width="140" height="90" rx="6" fill="#ffd166"/>
+  <rect x="530" y="120" width="70" height="20" rx="4 4 0 0" fill="#ffc233"/>
+  <text x="600" y="180" font-family="Arial,sans-serif" font-size="13" fill="#7a5800" text-anchor="middle">extension/</text>
+  <text x="600" y="228" font-family="Arial,sans-serif" font-size="28" fill="#b39ddb" text-anchor="middle">②</text>
+  <text x="600" y="248" font-family="Arial,sans-serif" font-size="12" fill="#888" text-anchor="middle">Unzip Folder</text>
+  <!-- Arrow -->
+  <path d="M745 170 L825 170" fill="none" stroke="#b39ddb" stroke-width="2.5"/>
+  <polygon points="825,163 840,170 825,177" fill="#b39ddb"/>
+  <!-- Step 3: Load unpacked button -->
+  <rect x="840" y="90" width="280" height="160" rx="10" fill="#fff" stroke="#b39ddb" stroke-width="2"/>
+  <rect x="880" y="140" width="200" height="40" rx="8" fill="#6c7ef7"/>
+  <text x="980" y="165" font-family="Arial,sans-serif" font-size="14" fill="#fff" text-anchor="middle">Load unpacked</text>
+  <!-- Checkmark -->
+  <circle cx="980" cy="220" r="22" fill="#06d6a0"/>
+  <polyline points="968,220 976,229 993,210" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="980" y="248" font-family="Arial,sans-serif" font-size="28" fill="#b39ddb" text-anchor="middle">③</text>
+  <!-- Bottom label -->
+  <text x="600" y="400" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#4a3066" text-anchor="middle">Install Unpacked Chrome Extension — Developer Mode</text>
+  <text x="600" y="430" font-family="Arial,sans-serif" font-size="14" fill="#888" text-anchor="middle">3 easy steps: toggle · unzip · load</text>
+</svg>

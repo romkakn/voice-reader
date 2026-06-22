@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#f5fff8"/>
+  <!-- Browser window -->
+  <rect x="200" y="60" width="680" height="340" rx="12" fill="#ffffff" stroke="#b0c4de" stroke-width="2"/>
+  <rect x="200" y="60" width="680" height="44" rx="12" fill="#e2eaf6"/>
+  <rect x="200" y="90" width="680" height="14" fill="#e2eaf6"/>
+  <circle cx="228" cy="82" r="7" fill="#ff6b6b"/>
+  <circle cx="248" cy="82" r="7" fill="#ffd166"/>
+  <circle cx="268" cy="82" r="7" fill="#06d6a0"/>
+  <!-- URL bar -->
+  <rect x="295" y="70" width="460" height="24" rx="12" fill="#fff" stroke="#c5cbfb" stroke-width="1.5"/>
+  <text x="525" y="87" font-family="Arial,sans-serif" font-size="12" fill="#888" text-anchor="middle">example.com/article</text>
+  <!-- Page text lines -->
+  <rect x="240" y="130" width="560" height="14" rx="3" fill="#dde3f0"/>
+  <rect x="240" y="154" width="480" height="14" rx="3" fill="#dde3f0"/>
+  <rect x="240" y="178" width="520" height="14" rx="3" fill="#dde3f0"/>
+  <!-- Highlighted word -->
+  <rect x="240" y="202" width="110" height="14" rx="3" fill="#ffd166"/>
+  <rect x="360" y="202" width="300" height="14" rx="3" fill="#dde3f0"/>
+  <rect x="240" y="226" width="440" height="14" rx="3" fill="#dde3f0"/>
+  <!-- Speaker floating -->
+  <circle cx="930" cy="220" r="90" fill="#e8fef0" stroke="#06d6a0" stroke-width="3"/>
+  <rect x="900" y="188" width="22" height="55" rx="4" fill="#06d6a0"/>
+  <polygon points="922,188 955,165 955,275 922,243" fill="#06d6a0"/>
+  <path d="M962 193 Q980 220 962 247" fill="none" stroke="#06d6a0" stroke-width="4" stroke-linecap="round"/>
+  <path d="M975 180 Q998 220 975 260" fill="none" stroke="#a8f0c6" stroke-width="4" stroke-linecap="round"/>
+  <!-- Arrow from browser to speaker -->
+  <path d="M880 220 Q905 220 910 220" fill="none" stroke="#06d6a0" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#06d6a0"/></marker></defs>
+  <text x="600" y="430" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#2d6a4f" text-anchor="middle">Make Chrome Read Text Aloud — Free</text>
+</svg>

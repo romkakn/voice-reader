@@ -76,3 +76,30 @@ The strategy here is sound: target low-competition, high-intent long-tail querie
    - List the extension on extension directories and "Speechify alternative" roundup sites.
 4. **Add a couple of outbound authority links** (Piper TTS GitHub, Chrome Extensions docs) to add topical trust — currently every link is internal.
 5. **Re-audit after fixes.** Target average ≥ 85 once the missing page, titles, images, and schema gaps are resolved.
+
+---
+
+## Polish round (2026-06-22)
+
+**New estimated average score: 82 / 100**
+
+### What was fixed
+
+| Fix | Impact |
+|-----|--------|
+| Missing page created (`install-unpacked-chrome-extension-developer-mode.html`) | Eliminated the score-0 broken link; recovered crawl equity across 6+ internal links |
+| Hero images added to all pages with keyword-rich `alt` text | Images now present on every page; Article schema `image` field populated |
+| Piper page fully rewritten | Comparison table, engine-mode docs, voice list, FAQ section added; content depth roughly doubled |
+| Dates corrected sitewide | `datePublished`/`dateModified` set to `2026-06-22` on all pages (was `2024-01-01` placeholders or missing) |
+| `operatingSystem` fixed on most pages | Now uses OS names (Windows, macOS, Linux) rather than browser names on install and piper pages |
+| Titles trimmed on most pages | e.g. "Free Speechify Alternative for Chrome — No Subscription" (55 chars), "Offline Neural TTS: Piper & WebAssembly" (39 chars) |
+| OG + Twitter social cards present on most pages | og:title, og:description, og:image populated sitewide |
+| `install` page now has step-by-step screenshots | 2 inline SVG diagrams with descriptive alt text |
+
+### Remaining items (ranked by impact)
+
+1. **Remove invalid `SearchAction` from index WebSite schema.** The `potentialAction` block in `index.html` points to a non-existent search URL (`/search?q=...`). This will fail Google's Rich Results Test and may suppress rich results on the index page. One-line fix: delete the `potentialAction` block from the JSON-LD.
+
+2. **Fix index H1 and CTA destination.** The body H1 is still bare `"Voice Reader"` with no primary keyword — rework to something like "Voice Reader: Free Text-to-Speech Chrome Extension." The primary CTA button still self-links to the homepage instead of the GitHub repo or Chrome Web Store.
+
+3. **Add `og:image` and `twitter:image` to free-speechify page; deepen thin content sitewide.** The speechify comparison page is missing OG/Twitter image meta tags entirely. More broadly, most pages remain ~650–700 words against competitors at 1,200–1,800; adding install screenshots, voice sample lists, and comparison depth is the main unlock for the competitive commercial-intent queries.

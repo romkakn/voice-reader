@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480">
+  <rect width="1200" height="480" fill="#fff9f0"/>
+  <!-- No wifi / offline symbol -->
+  <circle cx="300" cy="220" r="110" fill="#fff3e0" stroke="#ffd166" stroke-width="3"/>
+  <path d="M240 200 Q300 150 360 200" fill="none" stroke="#ffd166" stroke-width="5" stroke-linecap="round"/>
+  <path d="M260 230 Q300 195 340 230" fill="none" stroke="#ffd166" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="300" cy="255" r="10" fill="#ffd166"/>
+  <!-- Strike through -->
+  <line x1="225" y1="155" x2="375" y2="285" stroke="#ef476f" stroke-width="5" stroke-linecap="round"/>
+  <!-- Arrow -->
+  <path d="M430 220 L530 220" fill="none" stroke="#c5cbfb" stroke-width="3" stroke-dasharray="6 4"/>
+  <polygon points="530,213 545,220 530,227" fill="#c5cbfb"/>
+  <!-- Speaker works offline -->
+  <circle cx="670" cy="220" r="110" fill="#e8eeff" stroke="#6c7ef7" stroke-width="3"/>
+  <rect x="638" y="188" width="24" height="58" rx="4" fill="#6c7ef7"/>
+  <polygon points="662,188 700,162 700,278 662,250" fill="#6c7ef7"/>
+  <path d="M708 193 Q728 220 708 247" fill="none" stroke="#6c7ef7" stroke-width="4" stroke-linecap="round"/>
+  <path d="M722 178 Q748 220 722 262" fill="none" stroke="#a0abf9" stroke-width="4" stroke-linecap="round"/>
+  <!-- Checkmark inside shield -->
+  <circle cx="670" cy="280" r="18" fill="#06d6a0"/>
+  <polyline points="661,280 667,287 680,272" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- No account badge -->
+  <circle cx="900" cy="190" r="70" fill="#ffe8e8" stroke="#ef476f" stroke-width="2.5"/>
+  <circle cx="900" cy="175" r="22" fill="#ef476f"/>
+  <path d="M862 230 Q862 200 900 200 Q938 200 938 230" fill="#ef476f"/>
+  <line x1="850" y1="140" x2="950" y2="240" stroke="#ef476f" stroke-width="5" stroke-linecap="round"/>
+  <text x="900" y="295" font-family="Arial,sans-serif" font-size="13" fill="#ef476f" text-anchor="middle">No Account</text>
+  <text x="600" y="410" font-family="Arial,sans-serif" font-size="20" font-weight="bold" fill="#4a3500" text-anchor="middle">Free Offline TTS Extension — No Account Needed</text>
+  <text x="600" y="440" font-family="Arial,sans-serif" font-size="14" fill="#888" text-anchor="middle">Works without internet or sign-up</text>
+</svg>
