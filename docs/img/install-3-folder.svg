@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="-apple-system,Segoe UI,Arial,sans-serif">
+  <rect width="1200" height="750" fill="#e8eaed"/>
+  <!-- file picker dialog -->
+  <rect x="200" y="100" width="800" height="520" rx="14" fill="#ffffff" stroke="#dadce0"/>
+  <rect x="200" y="100" width="800" height="56" rx="14" fill="#f1f3f4"/>
+  <rect x="200" y="130" width="800" height="26" fill="#f1f3f4"/>
+  <text x="232" y="135" font-size="17" font-weight="600" fill="#202124">בחירת תיקייה</text>
+  <!-- sidebar -->
+  <rect x="200" y="156" width="200" height="394" fill="#fafafd"/>
+  <text x="232" y="200" font-size="14" fill="#5f6368">⭐ מועדפים</text>
+  <text x="232" y="234" font-size="14" fill="#5f6368">🖥 שולחן עבודה</text>
+  <text x="232" y="268" font-size="14" fill="#5f6368">⬇ הורדות</text>
+  <text x="232" y="302" font-size="14" fill="#5f6368">📄 מסמכים</text>
+  <!-- folder list -->
+  <rect x="416" y="180" width="560" height="40" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+  <text x="448" y="206" font-size="16" fill="#1a73e8" font-weight="600">📁 voice-reader</text>
+  <text x="448" y="262" font-size="16" fill="#3c4043">📁 downloads</text>
+  <text x="448" y="306" font-size="16" fill="#3c4043">📁 projects</text>
+  <text x="448" y="350" font-size="16" fill="#3c4043">📁 documents</text>
+  <!-- buttons -->
+  <rect x="700" y="556" width="120" height="44" rx="22" fill="#ffffff" stroke="#dadce0"/>
+  <text x="760" y="584" font-size="16" fill="#5f6368" text-anchor="middle">ביטול</text>
+  <rect x="840" y="556" width="130" height="44" rx="22" fill="#1a73e8"/>
+  <text x="905" y="584" font-size="16" fill="#ffffff" font-weight="600" text-anchor="middle">בחר</text>
+  <rect x="836" y="552" width="138" height="52" rx="26" fill="none" stroke="#0b57d0" stroke-width="3"/>
+  <text x="1120" y="690" font-size="24" font-weight="700" fill="#202124" text-anchor="end" direction="rtl">שלב 3 — בוחרים את תיקיית voice-reader</text>
+</svg>

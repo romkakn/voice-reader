@@ -1,0 +1,11 @@
+# Development & Environment
+.DS_Store
+node_modules/
+.env
+.env.*
+
+# Internal documentation (do NOT publish)
+HANDOFF.md
+
+# Logs
+*.log

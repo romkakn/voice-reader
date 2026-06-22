@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Voice Reader Offscreen</title>
+</head>
+<body>
+  <audio id="vr-audio"></audio>
+  <!-- ONNX Runtime Web (UMD) sets window.ort before the module runs. -->
+  <script src="../../vendor/ort/ort.wasm.min.js"></script>
+  <script type="module" src="offscreen.js"></script>
+</body>
+</html>

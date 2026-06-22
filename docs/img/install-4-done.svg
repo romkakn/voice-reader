@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="-apple-system,Segoe UI,Arial,sans-serif">
+  <rect width="1200" height="750" fill="#f1f3f4"/>
+  <rect x="40" y="40" width="1120" height="670" rx="14" fill="#ffffff" stroke="#dadce0"/>
+  <rect x="40" y="40" width="1120" height="52" rx="14" fill="#dee1e6"/>
+  <rect x="40" y="70" width="1120" height="22" fill="#dee1e6"/>
+  <rect x="60" y="52" width="220" height="34" rx="8" fill="#ffffff"/>
+  <text x="80" y="74" font-size="14" fill="#3c4043">Extensions</text>
+  <!-- toolbar puzzle icon -->
+  <rect x="1090" y="52" width="34" height="34" rx="8" fill="#ffffff" stroke="#dadce0"/>
+  <text x="1107" y="76" font-size="18" text-anchor="middle">🧩</text>
+  <rect x="60" y="104" width="1080" height="40" rx="20" fill="#f1f3f4"/>
+  <text x="86" y="129" font-size="15" fill="#3c4043">chrome://extensions</text>
+  <text x="80" y="200" font-size="26" font-weight="600" fill="#202124">Extensions</text>
+  <text x="940" y="196" font-size="16" fill="#3c4043">Developer mode</text>
+  <rect x="1060" y="182" width="48" height="24" rx="12" fill="#1a73e8"/>
+  <circle cx="1096" cy="194" r="9" fill="#ffffff"/>
+  <!-- installed extension card -->
+  <rect x="80" y="250" width="500" height="220" rx="14" fill="#ffffff" stroke="#dadce0"/>
+  <circle cx="140" cy="312" r="28" fill="#6c5ce7"/>
+  <text x="140" y="322" font-size="26" text-anchor="middle" fill="#ffffff">🔊</text>
+  <text x="190" y="305" font-size="22" font-weight="600" fill="#202124">Voice Reader</text>
+  <text x="190" y="334" font-size="15" fill="#5f6368">Select text and listen to it read aloud.</text>
+  <text x="112" y="392" font-size="14" fill="#5f6368">version 0.1.0</text>
+  <!-- enabled toggle -->
+  <rect x="500" y="420" width="48" height="24" rx="12" fill="#1a73e8"/>
+  <circle cx="536" cy="432" r="9" fill="#ffffff"/>
+  <text x="112" y="432" font-size="15" fill="#3c4043">Details</text>
+  <!-- green check -->
+  <circle cx="640" cy="312" r="34" fill="#e6f4ea"/>
+  <path d="M 624 312 l 11 12 l 22 -26" fill="none" stroke="#1e8e3e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="1120" y="690" font-size="24" font-weight="700" fill="#202124" text-anchor="end" direction="rtl">שלב 4 — מוכן! התוסף מותקן</text>
+</svg>

@@ -1,0 +1,126 @@
+/* Voice Reader — live caption screen. Glass panel, draggable + resizable. */
+.vr-cap {
+  position: fixed;
+  z-index: 2147483646; /* just under the bar */
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  min-height: 120px;
+  max-width: 92vw;
+  max-height: 80vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: both;
+  background: linear-gradient(180deg, rgba(18, 22, 32, 0.92), rgba(11, 13, 19, 0.94));
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 26px rgba(70, 150, 255, 0.10);
+  color: #eaf2ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  transition: opacity 0.18s ease;
+}
+.vr-cap--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.vr-cap--dragging { transition: none; }
+
+.vr-cap__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(120, 190, 255, 0.12);
+  cursor: grab;
+  flex: none;
+}
+.vr-cap--dragging .vr-cap__head { cursor: grabbing; }
+.vr-cap__grip {
+  width: 10px; height: 16px; flex: none;
+  background-image: radial-gradient(rgba(150,190,255,0.5) 1.1px, transparent 1.2px);
+  background-size: 5px 6px; border-radius: 3px;
+}
+.vr-cap__title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #8fb6ff; margin-right: auto;
+}
+.vr-cap__tools { display: inline-flex; align-items: center; gap: 4px; }
+
+.vr-cap__btn {
+  all: unset; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 24px; min-width: 24px; padding: 0 6px;
+  border-radius: 6px; cursor: pointer;
+  color: #c8d6ee; font-size: 12px; font-weight: 600;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.vr-cap__btn:hover { background: rgba(140, 190, 255, 0.16); color: #fff; }
+.vr-cap__close:hover { color: #ff7a90; background: rgba(255, 122, 144, 0.14); }
+
+.vr-cap__family {
+  all: unset; box-sizing: border-box;
+  height: 24px; padding: 0 6px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(120, 190, 255, 0.22); border-radius: 6px;
+  color: #eaf2ff; font-size: 12px; cursor: pointer;
+}
+.vr-cap__family option { background: #11151e; color: #eaf2ff; }
+
+.vr-cap__body {
+  flex: 1; overflow-y: auto;
+  padding: 12px 14px;
+  font-size: 20px; line-height: 1.7;
+  -webkit-user-select: text; user-select: text;
+}
+.vr-cap__line {
+  padding: 4px 10px; margin: 2px 0;
+  border-radius: 8px; cursor: pointer;
+  color: #9fb0c9;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.vr-cap__line:hover { background: rgba(140, 190, 255, 0.10); color: #dce8ff; }
+.vr-cap__line--active {
+  color: #ffffff;
+  background: linear-gradient(90deg, rgba(74, 130, 255, 0.20), rgba(164, 91, 255, 0.12));
+  box-shadow: inset 3px 0 0 #38e8ff;
+}
+.vr-cap__w {
+  background: linear-gradient(180deg, #38e8ff, #6a7bff);
+  color: #06121f; border-radius: 4px; padding: 0 2px;
+}
+
+/* Word marking — minimal. Base word stays weight 500 (fixed width → no reflow).
+   The current word is a bold overlay (::after, absolute) shown by toggling opacity.
+   No shadow, no transform, no transition → instant, zero wobble/jank. */
+.vr-cap__line--active .vr-cap__wd { position: relative; font-weight: 500; }
+.vr-cap__line--active .vr-cap__wd::after {
+  content: attr(data-word);
+  position: absolute; left: 0; top: 0;
+  white-space: pre;
+  font-weight: 700;
+  color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+}
+.vr-cap__line--active .vr-cap__wd--read { color: #7f93b3; }
+.vr-cap__line--active .vr-cap__wd--now { color: transparent; }
+.vr-cap__line--active .vr-cap__wd--now::after { opacity: 1; }
+
+/* on-state for toggle buttons (focus) */
+.vr-cap__btn--on { color: #06121f; background: linear-gradient(135deg, #38e8ff, #6a7bff); }
+.vr-cap__btn--on:hover { color: #06121f; filter: brightness(1.08); }
+
+/* focus mode — show only the line being read, centered & large */
+.vr-cap--focus .vr-cap__line:not(.vr-cap__line--active) { display: none; }
+.vr-cap--focus .vr-cap__body { display: flex; align-items: center; justify-content: center; }
+.vr-cap--focus .vr-cap__line--active {
+  background: none; box-shadow: none; text-align: center;
+  font-size: 1.18em; line-height: 1.5; max-width: 100%;
+}
+
+.vr-cap__hint {
+  flex: none; padding: 6px 12px;
+  border-top: 1px solid rgba(120, 190, 255, 0.10);
+  font-size: 10.5px; color: #6f7e98; text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-cap, .vr-cap__line { transition: none; }
+}

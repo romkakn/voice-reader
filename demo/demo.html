@@ -1,0 +1,825 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Cat - Wikipedia</title><style>
+body{margin:0;font-family:'Helvetica Neue',Arial,sans-serif;background:#fff;color:#202122}
+.top{border-bottom:1px solid #a2a9b1;padding:8px 16px;font-size:13px;color:#54595d;display:flex;gap:18px}
+.top b{color:#202122}
+.wrap{max-width:860px;margin:0 auto;padding:20px 28px}
+h1{font-family:Georgia,serif;font-weight:400;font-size:28px;border-bottom:1px solid #a2a9b1;padding-bottom:6px;margin:8px 0 16px}
+h2{font-family:Georgia,serif;font-weight:400;font-size:22px;border-bottom:1px solid #a2a9b1;padding-bottom:4px;margin:24px 0 12px}
+p{font-size:15px;line-height:1.7;margin:0 0 14px}
+a.w{color:#3366cc;text-decoration:none}
+.box{float:right;width:250px;border:1px solid #a2a9b1;background:#f8f9fa;margin:0 0 14px 18px;padding:10px;border-radius:3px;font-size:13px}
+.box .ph{height:150px;background:linear-gradient(135deg,#cdd5e0,#aeb8c9);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:40px}
+/* Voice Reader — floating control bar. Futuristic-minimal glass pill.
+   All selectors scoped under .vr-bar / .vr-panel; buttons reset with `all: unset`. */
+.vr-bar {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 8px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(20, 24, 34, 0.82), rgba(12, 14, 20, 0.86));
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.16);
+  border-radius: 999px;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 0 22px rgba(70, 150, 255, 0.10);
+  color: #eaf2ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  user-select: none;
+  cursor: grab;
+  opacity: 1;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+}
+.vr-bar--dragging { cursor: grabbing; transition: none; box-shadow: 0 14px 44px rgba(0,0,0,0.55), 0 0 26px rgba(70,150,255,0.18); }
+
+.vr-bar--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* drag grip dots */
+.vr-bar__grip {
+  width: 10px; height: 18px; margin-left: 3px; flex: none;
+  background-image: radial-gradient(currentColor 1.1px, transparent 1.2px);
+  background-size: 5px 6px;
+  color: rgba(150, 190, 255, 0.45);
+  border-radius: 3px;
+}
+
+/* mode tag */
+.vr-bar__mode {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8fb6ff;
+}
+.vr-bar__mode:empty { display: none; }
+
+/* generic button reset */
+.vr-bar__btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #c8d6ee;
+  font-size: 14px;
+  transition: background 0.14s ease, color 0.14s ease, transform 0.08s ease;
+}
+.vr-bar__btn:hover { background: rgba(140, 190, 255, 0.14); color: #fff; }
+.vr-bar__btn:active { transform: scale(0.92); }
+
+/* play / pause — accent gradient orb */
+.vr-bar__play {
+  position: relative;
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #38e8ff, #6a7bff 70%, #a45bff);
+  color: #06121f;
+  box-shadow: 0 2px 10px rgba(74, 130, 255, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+.vr-bar__play:hover { filter: brightness(1.08); }
+.vr-bar__play:active { transform: scale(0.94); }
+
+.vr-bar__ico { position: absolute; display: none; }
+.vr-bar__ico--play {
+  display: block; width: 0; height: 0;
+  border-style: solid; border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+  margin-left: 2px;
+}
+.vr-bar__ico--pause { gap: 3px; }
+.vr-bar__ico--pause i { display: block; width: 3px; height: 12px; background: currentColor; border-radius: 1px; }
+.vr-bar--playing .vr-bar__ico--play { display: none; }
+.vr-bar--playing .vr-bar__ico--pause { display: flex; }
+
+.vr-bar__ico--spin {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(6, 18, 31, 0.35); border-top-color: #06121f;
+  animation: vr-spin 0.7s linear infinite;
+}
+.vr-bar--loading .vr-bar__ico--play,
+.vr-bar--loading .vr-bar__ico--pause { display: none; }
+.vr-bar--loading .vr-bar__ico--spin { display: block; }
+@keyframes vr-spin { to { transform: rotate(360deg); } }
+
+/* speed cluster */
+.vr-bar__speed { display: inline-flex; align-items: center; gap: 2px; }
+.vr-bar__sd, .vr-bar__su { width: 24px; height: 24px; font-size: 15px; font-weight: 600; }
+.vr-bar__speed-label {
+  min-width: 38px; text-align: center;
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum";
+  font-size: 12.5px; font-weight: 600; color: #dce8ff;
+}
+
+.vr-bar__cc {
+  width: auto; padding: 0 7px; height: 22px; border-radius: 6px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.06em; color: #9fb2d4;
+  border: 1px solid rgba(140, 190, 255, 0.22);
+}
+.vr-bar__cc--on { color: #06121f; background: linear-gradient(135deg, #38e8ff, #6a7bff); border-color: transparent; }
+.vr-bar__cc--on:hover { color: #06121f; filter: brightness(1.08); }
+.vr-bar__gear { font-size: 15px; color: #9fb2d4; }
+.vr-bar__gear:hover { color: #fff; transform: rotate(45deg); }
+.vr-bar__sep { width: 1px; height: 18px; background: rgba(140, 190, 255, 0.18); margin: 0 1px; }
+.vr-bar__close { font-size: 11px; color: #7e8aa3; }
+.vr-bar__close:hover { color: #ff7a90; background: rgba(255, 122, 144, 0.14); }
+
+/* ---- settings panel (anchored above the bar) ------------------------------- */
+.vr-panel {
+  position: absolute;
+  left: 8px; right: 8px; bottom: calc(100% + 10px);
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(22, 26, 37, 0.96), rgba(13, 15, 22, 0.97));
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(70, 150, 255, 0.10);
+  cursor: default;
+}
+.vr-panel--hidden { display: none; }
+.vr-panel__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.vr-panel__row > span {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #93a6c6;
+}
+.vr-panel select {
+  all: unset;
+  flex: 1; max-width: 200px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(120, 190, 255, 0.22);
+  border-radius: 8px;
+  color: #eaf2ff; font-size: 12.5px; cursor: pointer;
+}
+.vr-panel select:hover { border-color: rgba(120, 190, 255, 0.4); }
+.vr-panel select option { background: #11151e; color: #eaf2ff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-bar, .vr-bar__btn { transition: none; }
+  .vr-bar__ico--spin { animation-duration: 1.2s; }
+}
+
+/* Voice Reader — live caption screen. Glass panel, draggable + resizable. */
+.vr-cap {
+  position: fixed;
+  z-index: 2147483646; /* just under the bar */
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  min-height: 120px;
+  max-width: 92vw;
+  max-height: 80vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: both;
+  background: linear-gradient(180deg, rgba(18, 22, 32, 0.92), rgba(11, 13, 19, 0.94));
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 26px rgba(70, 150, 255, 0.10);
+  color: #eaf2ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  transition: opacity 0.18s ease;
+}
+.vr-cap--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.vr-cap--dragging { transition: none; }
+
+.vr-cap__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(120, 190, 255, 0.12);
+  cursor: grab;
+  flex: none;
+}
+.vr-cap--dragging .vr-cap__head { cursor: grabbing; }
+.vr-cap__grip {
+  width: 10px; height: 16px; flex: none;
+  background-image: radial-gradient(rgba(150,190,255,0.5) 1.1px, transparent 1.2px);
+  background-size: 5px 6px; border-radius: 3px;
+}
+.vr-cap__title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #8fb6ff; margin-right: auto;
+}
+.vr-cap__tools { display: inline-flex; align-items: center; gap: 4px; }
+
+.vr-cap__btn {
+  all: unset; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 24px; min-width: 24px; padding: 0 6px;
+  border-radius: 6px; cursor: pointer;
+  color: #c8d6ee; font-size: 12px; font-weight: 600;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.vr-cap__btn:hover { background: rgba(140, 190, 255, 0.16); color: #fff; }
+.vr-cap__close:hover { color: #ff7a90; background: rgba(255, 122, 144, 0.14); }
+
+.vr-cap__family {
+  all: unset; box-sizing: border-box;
+  height: 24px; padding: 0 6px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(120, 190, 255, 0.22); border-radius: 6px;
+  color: #eaf2ff; font-size: 12px; cursor: pointer;
+}
+.vr-cap__family option { background: #11151e; color: #eaf2ff; }
+
+.vr-cap__body {
+  flex: 1; overflow-y: auto;
+  padding: 12px 14px;
+  font-size: 20px; line-height: 1.7;
+  -webkit-user-select: text; user-select: text;
+}
+.vr-cap__line {
+  padding: 4px 10px; margin: 2px 0;
+  border-radius: 8px; cursor: pointer;
+  color: #9fb0c9;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.vr-cap__line:hover { background: rgba(140, 190, 255, 0.10); color: #dce8ff; }
+.vr-cap__line--active {
+  color: #ffffff;
+  background: linear-gradient(90deg, rgba(74, 130, 255, 0.20), rgba(164, 91, 255, 0.12));
+  box-shadow: inset 3px 0 0 #38e8ff;
+}
+.vr-cap__w {
+  background: linear-gradient(180deg, #38e8ff, #6a7bff);
+  color: #06121f; border-radius: 4px; padding: 0 2px;
+}
+
+/* Word marking — minimal. Base word stays weight 500 (fixed width → no reflow).
+   The current word is a bold overlay (::after, absolute) shown by toggling opacity.
+   No shadow, no transform, no transition → instant, zero wobble/jank. */
+.vr-cap__line--active .vr-cap__wd { position: relative; font-weight: 500; }
+.vr-cap__line--active .vr-cap__wd::after {
+  content: attr(data-word);
+  position: absolute; left: 0; top: 0;
+  white-space: pre;
+  font-weight: 700;
+  color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+}
+.vr-cap__line--active .vr-cap__wd--read { color: #7f93b3; }
+.vr-cap__line--active .vr-cap__wd--now { color: transparent; }
+.vr-cap__line--active .vr-cap__wd--now::after { opacity: 1; }
+
+/* on-state for toggle buttons (focus) */
+.vr-cap__btn--on { color: #06121f; background: linear-gradient(135deg, #38e8ff, #6a7bff); }
+.vr-cap__btn--on:hover { color: #06121f; filter: brightness(1.08); }
+
+/* focus mode — show only the line being read, centered & large */
+.vr-cap--focus .vr-cap__line:not(.vr-cap__line--active) { display: none; }
+.vr-cap--focus .vr-cap__body { display: flex; align-items: center; justify-content: center; }
+.vr-cap--focus .vr-cap__line--active {
+  background: none; box-shadow: none; text-align: center;
+  font-size: 1.18em; line-height: 1.5; max-width: 100%;
+}
+
+.vr-cap__hint {
+  flex: none; padding: 6px 12px;
+  border-top: 1px solid rgba(120, 190, 255, 0.10);
+  font-size: 10.5px; color: #6f7e98; text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-cap, .vr-cap__line { transition: none; }
+}
+
+</style></head><body>
+<div class="top"><b>WIKIPEDIA</b><span>Main page</span><span>Talk</span><span>Read</span><span>View source</span><span>View history</span></div>
+<div class="wrap"><h1>Cat</h1>
+<div class="box"><div class="ph">🐈</div><div style="text-align:center;margin-top:6px;color:#54595d">Domestic cat</div></div>
+<p id="para">The cat (Felis catus), also referred to as the domestic cat, is a small domesticated carnivorous mammal. It is the only domesticated species of the family Felidae. Valued by humans for companionship and its ability to kill vermin, the cat is now the most popular pet in the world.</p>
+<h2>Etymology</h2>
+<p>The origin of the English word <a class="w">cat</a>, Old English <i>catt</i>, is thought to be the Late Latin word <i>cattus</i>, first used at the beginning of the 6th century.</p>
+<p>It is commonly kept as a pet and working cat, but also ranges freely as a feral cat avoiding human contact.</p></div>
+<script>(function(){window.chrome={storage:{local:{get:(k,cb)=>cb({}),set:()=>{}},sync:{get:(k,cb)=>cb({vr_settings:{engine:'auto',piper:{voiceId:'en_US-hfc_female-medium'}}}),set:()=>{}}},runtime:{onMessage:{addListener:()=>{}},sendMessage:()=>{},getURL:p=>p}};})();</script><script>// VR.Bar — floating control bar (futuristic-minimal glass pill).
+// Fixed-position, draggable, position persisted. Inline settings panel.
+window.VR = window.VR || {};
+
+VR.Bar = (function () {
+  const VOICES = [
+    ['en_US-hfc_female-medium', 'HFC Female (US)'],
+    ['en_US-hfc_male-medium', 'HFC Male (US)'],
+    ['en_US-lessac-high', 'Lessac (US) · HQ'],
+    ['en_US-amy-medium', 'Amy (US)'],
+    ['en_GB-jenny_dioco-medium', 'Jenny (UK)'],
+  ];
+
+  function storageGet(area, key, cb) {
+    try { chrome.storage[area].get(key, cb); } catch (e) { cb({}); }
+  }
+  function storageSet(area, obj) {
+    try { chrome.storage[area].set(obj); } catch (e) {}
+  }
+
+  class Bar {
+    constructor() {
+      this._speed = 1.0;
+      this._state = 'idle';
+      this._mode = '';
+      this._el = null;
+      this._panel = null;
+      this._drag = null;
+      this._build();
+      this._buildPanel();
+      this._restorePos();
+    }
+
+    _build() {
+      const el = document.createElement('div');
+      el.className = 'vr-bar vr-bar--hidden';
+      el.setAttribute('role', 'toolbar');
+      el.setAttribute('aria-label', 'Voice Reader controls');
+      el.innerHTML = `
+        <span class="vr-bar__grip" title="Drag" aria-hidden="true"></span>
+        <span class="vr-bar__mode"></span>
+        <button class="vr-bar__btn vr-bar__play" type="button" title="Play / Pause" aria-label="Play or pause">
+          <span class="vr-bar__ico vr-bar__ico--play"></span>
+          <span class="vr-bar__ico vr-bar__ico--pause"><i></i><i></i></span>
+          <span class="vr-bar__ico vr-bar__ico--spin"></span>
+        </button>
+        <div class="vr-bar__speed">
+          <button class="vr-bar__btn vr-bar__sd" type="button" title="Slower" aria-label="Slower">&#8722;</button>
+          <span class="vr-bar__speed-label">1.0x</span>
+          <button class="vr-bar__btn vr-bar__su" type="button" title="Faster" aria-label="Faster">&#43;</button>
+        </div>
+        <button class="vr-bar__btn vr-bar__cc" type="button" title="Captions" aria-label="Toggle captions">CC</button>
+        <button class="vr-bar__btn vr-bar__gear" type="button" title="Settings" aria-label="Settings">&#9881;</button>
+        <span class="vr-bar__sep"></span>
+        <button class="vr-bar__btn vr-bar__close" type="button" title="Close" aria-label="Close">&#10005;</button>
+      `;
+      document.body.appendChild(el);
+      this._el = el;
+      this._playBtn = el.querySelector('.vr-bar__play');
+      this._speedLabel = el.querySelector('.vr-bar__speed-label');
+      this._modeLabel = el.querySelector('.vr-bar__mode');
+
+      this._playBtn.addEventListener('click', () => { if (this.onPlayPause) this.onPlayPause(); });
+      el.querySelector('.vr-bar__sd').addEventListener('click', () => {
+        const next = Math.max(0.5, Math.round((this._speed - 0.1) * 10) / 10);
+        this.setSpeed(next); if (this.onSpeedDown) this.onSpeedDown(next);
+      });
+      el.querySelector('.vr-bar__su').addEventListener('click', () => {
+        const next = Math.min(2.0, Math.round((this._speed + 0.1) * 10) / 10);
+        this.setSpeed(next); if (this.onSpeedUp) this.onSpeedUp(next);
+      });
+      el.querySelector('.vr-bar__cc').addEventListener('click', () => { if (this.onToggleCaptions) this.onToggleCaptions(); });
+      el.querySelector('.vr-bar__gear').addEventListener('click', () => this._togglePanel());
+      el.querySelector('.vr-bar__close').addEventListener('click', () => { if (this.onClose) this.onClose(); });
+
+      // Dragging — anywhere on the bar except interactive controls.
+      el.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button, select')) return;
+        this._dragStart(e);
+      });
+    }
+
+    _buildPanel() {
+      const p = document.createElement('div');
+      p.className = 'vr-panel vr-panel--hidden';
+      p.innerHTML = `
+        <div class="vr-panel__row"><span>Engine</span>
+          <select class="vr-p-engine">
+            <option value="auto">Auto · neural → system</option>
+            <option value="piper">Neural (Piper)</option>
+            <option value="system">System voice</option>
+          </select></div>
+        <div class="vr-panel__row"><span>Voice</span>
+          <select class="vr-p-voice">${VOICES.map(v => `<option value="${v[0]}">${v[1]}</option>`).join('')}</select></div>
+        <div class="vr-panel__row"><span>Mode</span>
+          <select class="vr-p-mode"><option value="explanatory">Explain</option><option value="storytelling">Story</option></select></div>
+      `;
+      this._el.appendChild(p);
+      this._panel = p;
+
+      p.querySelector('.vr-p-engine').addEventListener('change', (e) => this._saveSetting('engine', e.target.value));
+      p.querySelector('.vr-p-voice').addEventListener('change', (e) => this._saveSetting('piper', { voiceId: e.target.value }));
+      p.querySelector('.vr-p-mode').addEventListener('change', (e) => {
+        const m = e.target.value;
+        this.setMode(m === 'storytelling' ? 'Story' : 'Explain');
+        if (this.onModeChange) this.onModeChange(m);
+      });
+    }
+
+    _togglePanel() {
+      const hidden = this._panel.classList.toggle('vr-panel--hidden');
+      if (!hidden) this._loadPanel();
+    }
+    _loadPanel() {
+      storageGet('sync', 'vr_settings', (r) => {
+        const s = (r && r.vr_settings) || {};
+        if (s.engine) this._panel.querySelector('.vr-p-engine').value = s.engine;
+        if (s.piper && s.piper.voiceId) this._panel.querySelector('.vr-p-voice').value = s.piper.voiceId;
+      });
+    }
+    _saveSetting(key, val) {
+      storageGet('sync', 'vr_settings', (r) => {
+        const s = Object.assign({}, r && r.vr_settings);
+        s[key] = val;
+        storageSet('sync', { vr_settings: s });
+      });
+    }
+
+    // ---- dragging -------------------------------------------------------------
+    _dragStart(e) {
+      const r = this._el.getBoundingClientRect();
+      this._drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+      this._el.classList.add('vr-bar--dragging');
+      const move = (ev) => this._dragMove(ev);
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        this._el.classList.remove('vr-bar--dragging');
+        this._drag = null;
+        this._savePos();
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      e.preventDefault();
+    }
+    _dragMove(e) {
+      if (!this._drag) return;
+      const w = this._el.offsetWidth, h = this._el.offsetHeight, m = 6;
+      let left = e.clientX - this._drag.dx;
+      let top = e.clientY - this._drag.dy;
+      left = Math.max(m, Math.min(left, window.innerWidth - w - m));
+      top = Math.max(m, Math.min(top, window.innerHeight - h - m));
+      this._applyPos({ left: left + 'px', top: top + 'px' });
+    }
+    _applyPos(pos) {
+      const el = this._el;
+      el.style.left = pos.left;
+      el.style.top = pos.top;
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+      el.style.marginLeft = '0';
+    }
+    _savePos() {
+      storageSet('local', { vr_barpos: { left: this._el.style.left, top: this._el.style.top } });
+    }
+    _restorePos() {
+      storageGet('local', 'vr_barpos', (r) => {
+        if (r && r.vr_barpos && r.vr_barpos.left) this._applyPos(r.vr_barpos);
+      });
+    }
+
+    // ---- public API (positioning is fixed & user-controlled) ------------------
+    show() {
+      const el = this._el;
+      if (!el.style.left) {
+        // default: bottom-center, in viewport (position: fixed)
+        const w = el.offsetWidth || 320;
+        this._applyPos({
+          left: Math.round((window.innerWidth - w) / 2) + 'px',
+          top: Math.round(window.innerHeight - 80) + 'px',
+        });
+      }
+      el.classList.remove('vr-bar--hidden');
+    }
+    hide() {
+      this._el.classList.add('vr-bar--hidden');
+      this._panel.classList.add('vr-panel--hidden');
+    }
+    setState(state) {
+      this._state = state;
+      const el = this._el;
+      el.classList.toggle('vr-bar--playing', state === 'playing');
+      el.classList.toggle('vr-bar--loading', state === 'loading');
+      this._playBtn.title = state === 'playing' ? 'Pause' : (state === 'loading' ? 'Loading voice…' : 'Play');
+    }
+    setSpeed(r) {
+      this._speed = Math.max(0.5, Math.min(2.0, r));
+      this._speedLabel.textContent = this._speed.toFixed(1) + 'x';
+    }
+    setMode(modeLabel) {
+      this._mode = modeLabel;
+      this._modeLabel.textContent = modeLabel;
+      const sel = this._panel && this._panel.querySelector('.vr-p-mode');
+      if (sel) sel.value = modeLabel === 'Story' ? 'storytelling' : 'explanatory';
+    }
+    setCaptionsActive(on) {
+      this._el.querySelector('.vr-bar__cc').classList.toggle('vr-bar__cc--on', !!on);
+    }
+  }
+
+  return Bar;
+})();
+</script><script>// VR.Captions — live caption screen. Shows the sentences being read, highlights
+// the active one (and active word for the system engine), auto-scrolls, and lets
+// the user click any sentence/word to replay from there. Draggable, resizable,
+// with readability settings (font size / family / line spacing). Prefs persisted.
+window.VR = window.VR || {};
+
+VR.Captions = (function () {
+  const FAMILIES = [
+    ['system', 'Sans'],
+    ['Georgia, "Times New Roman", serif', 'Serif'],
+    ['"SF Mono", ui-monospace, Menlo, monospace', 'Mono'],
+    ['"Comic Sans MS", "Comic Sans", cursive', 'Readable'],
+  ];
+  const DEFAULT_PREFS = { fontSize: 20, family: 'system', lineHeight: 1.7, focus: false };
+
+  function sGet(area, key, cb) { try { chrome.storage[area].get(key, cb); } catch (e) { cb({}); } }
+  function sSet(area, obj) { try { chrome.storage[area].set(obj); } catch (e) {} }
+
+  class Captions {
+    constructor() {
+      this._el = null;
+      this._body = null;
+      this._lines = [];
+      this._active = -1;
+      this._words = [];
+      this._wordEls = null;
+      this._wordAt = -1;
+      this._prefs = Object.assign({}, DEFAULT_PREFS);
+      this._drag = null;
+      this._build();
+      this._restore();
+    }
+
+    _build() {
+      const el = document.createElement('div');
+      el.className = 'vr-cap vr-cap--hidden';
+      el.setAttribute('role', 'region');
+      el.setAttribute('aria-label', 'Live captions');
+      el.innerHTML = `
+        <div class="vr-cap__head">
+          <span class="vr-cap__grip" aria-hidden="true"></span>
+          <span class="vr-cap__title">Captions</span>
+          <div class="vr-cap__tools">
+            <button class="vr-cap__btn vr-cap__fs-down" type="button" title="Smaller text" aria-label="Smaller text">A&#8722;</button>
+            <button class="vr-cap__btn vr-cap__fs-up" type="button" title="Larger text" aria-label="Larger text">A&#43;</button>
+            <select class="vr-cap__family" title="Font">${FAMILIES.map(f => `<option value="${f[0].replace(/"/g, '&quot;')}">${f[1]}</option>`).join('')}</select>
+            <button class="vr-cap__btn vr-cap__ls" type="button" title="Line spacing" aria-label="Line spacing">&#8693;</button>
+            <button class="vr-cap__btn vr-cap__focus" type="button" title="Focus mode — show only the line being read" aria-label="Focus mode">&#9678;</button>
+            <button class="vr-cap__btn vr-cap__close" type="button" title="Hide captions" aria-label="Hide captions">&#10005;</button>
+          </div>
+        </div>
+        <div class="vr-cap__body" tabindex="0"></div>
+        <div class="vr-cap__hint">Click any line to replay from there</div>
+      `;
+      document.body.appendChild(el);
+      this._el = el;
+      this._body = el.querySelector('.vr-cap__body');
+      this._familySel = el.querySelector('.vr-cap__family');
+
+      el.querySelector('.vr-cap__fs-down').addEventListener('click', () => this._bumpFont(-2));
+      el.querySelector('.vr-cap__fs-up').addEventListener('click', () => this._bumpFont(2));
+      el.querySelector('.vr-cap__ls').addEventListener('click', () => this._cycleLineHeight());
+      el.querySelector('.vr-cap__focus').addEventListener('click', () => this.toggleFocus());
+      this._familySel.addEventListener('change', (e) => { this._prefs.family = e.target.value; this._applyPrefs(); this._savePrefs(); });
+      el.querySelector('.vr-cap__close').addEventListener('click', () => { this.hide(); if (this.onClose) this.onClose(); });
+
+      // Click a line/word -> replay from that sentence.
+      this._body.addEventListener('click', (e) => {
+        const line = e.target.closest('.vr-cap__line');
+        if (!line || !this.onReplay) return;
+        this.onReplay(parseInt(line.dataset.i, 10));
+      });
+
+      // Drag by the header.
+      el.querySelector('.vr-cap__head').addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button, select')) return;
+        this._dragStart(e);
+      });
+    }
+
+    // ---- content ----
+    setChunks(chunks) {
+      this._active = -1;
+      this._lines = [];
+      this._body.innerHTML = '';
+      chunks.forEach((c, i) => {
+        const d = document.createElement('div');
+        d.className = 'vr-cap__line';
+        d.dataset.i = i;
+        d.textContent = c;
+        this._body.appendChild(d);
+        this._lines.push({ el: d, text: c });
+      });
+    }
+
+    setActive(index) {
+      if (index === this._active) {
+        // re-arm word spans even if same line (e.g. replay of same chunk)
+        if (!this._words.length) this._renderWords(this._lines[index]);
+        return;
+      }
+      const prev = this._lines[this._active];
+      if (prev) { prev.el.classList.remove('vr-cap__line--active'); prev.el.textContent = prev.text; }
+      this._active = index;
+      this._words = [];
+      this._wordAt = -1;
+      const cur = this._lines[index];
+      if (!cur) return;
+      cur.el.classList.add('vr-cap__line--active');
+      this._renderWords(cur);
+      // Scroll within the caption body only — never trigger page scroll.
+      const body = this._body;
+      if (body) {
+        const lr = cur.el.getBoundingClientRect();
+        const br = body.getBoundingClientRect();
+        if (lr.top < br.top || lr.bottom > br.bottom) {
+          body.scrollTop += (lr.top - br.top) - (br.height / 2) + (lr.height / 2);
+        }
+      }
+    }
+
+    // Tokenize the active line into per-word spans so words can be marked as read.
+    // No glow pill — current word is shown via bold + color emphasis (CSS transition).
+    _renderWords(cur) {
+      if (!cur) return;
+      const t = cur.text || '';
+      if (!t.trim()) { this._wordEls = []; this._words = []; return; }
+      const re = /\S+/g;
+      let m, last = 0, html = '', wi = 0;
+      this._words = [];
+      while ((m = re.exec(t)) !== null) {
+        html += esc(t.slice(last, m.index));
+        // data-word holds the bold overlay text (rendered via ::after) so the
+        // base word keeps a fixed weight/width — toggling "now" never reflows.
+        html += '<span class="vr-cap__wd" data-w="' + wi + '" data-word="' + escAttr(m[0]) + '">' + esc(m[0]) + '</span>';
+        this._words.push({ start: m.index, end: m.index + m[0].length });
+        last = m.index + m[0].length;
+        wi++;
+      }
+      html += esc(t.slice(last));
+      cur.el.innerHTML = html;
+      this._wordEls = cur.el.querySelectorAll('.vr-cap__wd');
+    }
+
+    wordCount() { return this._words ? this._words.length : 0; }
+
+    // Advance the "current word" highlight. FORWARD-ONLY within an active line:
+    // speech-boundary events (and the Piper timer) can fire slightly out of order,
+    // so ignoring any index <= the current one stops the bold from flickering
+    // back-and-forth between words. A new line / replay resets via setActive().
+    markWord(idx) {
+      if (!this._wordEls || !this._wordEls.length) return;
+      const N = this._wordEls.length;
+      if (idx < 0 || idx >= N) return;     // out of range — keep current
+      if (idx <= this._wordAt) return;     // monotonic: never step backward
+
+      if (this._wordAt >= 0) this._wordEls[this._wordAt].classList.remove('vr-cap__wd--now');
+      for (let k = Math.max(0, this._wordAt); k < idx; k++) {
+        this._wordEls[k].classList.add('vr-cap__wd--read');
+        this._wordEls[k].classList.remove('vr-cap__wd--now');
+      }
+      const cur = this._wordEls[idx];
+      cur.classList.add('vr-cap__wd--now');
+      cur.classList.remove('vr-cap__wd--read');
+      this._wordAt = idx;
+    }
+
+    // Map a character offset (system engine onboundary) to a word index.
+    markWordByChar(charIndex) {
+      if (typeof charIndex !== 'number' || !this._words) return;
+      for (let k = 0; k < this._words.length; k++) {
+        if (charIndex >= this._words[k].start && charIndex < this._words[k].end) { this.markWord(k); return; }
+      }
+    }
+    // Back-compat alias.
+    highlightWord(charIndex) { this.markWordByChar(charIndex); }
+
+    // ---- focus mode ----
+    toggleFocus() {
+      this._prefs.focus = !this._prefs.focus;
+      this._applyFocus();
+      this._savePrefs();
+    }
+    _applyFocus() {
+      this._el.classList.toggle('vr-cap--focus', !!this._prefs.focus);
+      const b = this._el.querySelector('.vr-cap__focus');
+      if (b) b.classList.toggle('vr-cap__btn--on', !!this._prefs.focus);
+    }
+
+    // ---- visibility ----
+    show() { this._ensurePos(); this._el.classList.remove('vr-cap--hidden'); }
+    hide() { this._el.classList.add('vr-cap--hidden'); }
+    isVisible() { return !this._el.classList.contains('vr-cap--hidden'); }
+    toggle() { this.isVisible() ? this.hide() : this.show(); return this.isVisible(); }
+
+    // ---- readability prefs ----
+    _bumpFont(d) {
+      this._prefs.fontSize = Math.max(12, Math.min(40, this._prefs.fontSize + d));
+      this._applyPrefs(); this._savePrefs();
+    }
+    _cycleLineHeight() {
+      const steps = [1.4, 1.7, 2.1];
+      const i = (steps.indexOf(this._prefs.lineHeight) + 1) % steps.length;
+      this._prefs.lineHeight = steps[i];
+      this._applyPrefs(); this._savePrefs();
+    }
+    _applyPrefs() {
+      const fam = this._prefs.family === 'system'
+        ? 'ui-sans-serif, system-ui, -apple-system, sans-serif' : this._prefs.family;
+      this._body.style.fontSize = this._prefs.fontSize + 'px';
+      this._body.style.fontFamily = fam;
+      this._body.style.lineHeight = String(this._prefs.lineHeight);
+      if (this._familySel) this._familySel.value = this._prefs.family;
+      this._applyFocus();
+    }
+    _savePrefs() { sSet('local', { vr_caption_prefs: this._prefs }); }
+
+    // ---- position / size persistence ----
+    _ensurePos() {
+      const el = this._el;
+      if (!el.style.left) {
+        const w = 420, h = 260;
+        el.style.width = w + 'px';
+        el.style.height = h + 'px';
+        el.style.left = Math.round((window.innerWidth - w) / 2) + 'px';
+        el.style.top = '90px';
+      }
+    }
+    _dragStart(e) {
+      const r = this._el.getBoundingClientRect();
+      this._drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+      this._el.classList.add('vr-cap--dragging');
+      const move = (ev) => this._dragMove(ev);
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        this._el.classList.remove('vr-cap--dragging');
+        this._drag = null; this._saveBox();
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      e.preventDefault();
+    }
+    _dragMove(e) {
+      if (!this._drag) return;
+      const el = this._el, w = el.offsetWidth, h = el.offsetHeight, m = 6;
+      let left = Math.max(m, Math.min(e.clientX - this._drag.dx, window.innerWidth - w - m));
+      let top = Math.max(m, Math.min(e.clientY - this._drag.dy, window.innerHeight - h - m));
+      el.style.left = left + 'px'; el.style.top = top + 'px';
+    }
+    _saveBox() {
+      const el = this._el;
+      sSet('local', { vr_caption_box: { left: el.style.left, top: el.style.top, width: el.style.width, height: el.style.height } });
+    }
+    _restore() {
+      sGet('local', ['vr_caption_prefs', 'vr_caption_box'], (r) => {
+        if (r && r.vr_caption_prefs) this._prefs = Object.assign({}, DEFAULT_PREFS, r.vr_caption_prefs);
+        this._applyPrefs();
+        if (r && r.vr_caption_box && r.vr_caption_box.left) {
+          const b = r.vr_caption_box, el = this._el;
+          el.style.left = b.left; el.style.top = b.top;
+          if (b.width) el.style.width = b.width;
+          if (b.height) el.style.height = b.height;
+        }
+      });
+      // Persist user resize (CSS `resize`) when the pointer leaves the panel.
+      this._el.addEventListener('mouseup', () => this._saveBox());
+    }
+  }
+
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escAttr(s) {
+    return esc(s).replace(/"/g, '&quot;');
+  }
+
+  return Captions;
+})();
+</script><script>
+const PARA="The cat (Felis catus), also referred to as the domestic cat, is a small domesticated carnivorous mammal. It is the only domesticated species of the family Felidae. Valued by humans for companionship and its ability to kill vermin, the cat is now the most popular pet in the world.";
+function chunk(t){const o=[];const re=/[^.!?]+[.!?]+/g;let m;while((m=re.exec(t))!==null)o.push(m[0].trim());return o;}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+function wordDur(w){return Math.max(150,90+w.length*55);}
+const caps=new VR.Captions(); const bar=new VR.Bar();
+bar.setMode('Explain'); bar.setSpeed(1.0);
+caps._el.style.left='auto'; caps._el.style.right='28px'; caps._el.style.top='118px'; caps._el.style.width='440px'; caps._el.style.height='250px';
+let RUN=false;
+window.demo={caps,bar,
+  showAll(){bar.show();caps.setChunks(chunk(PARA));caps.show();},
+  setActive(i){caps.setActive(i);}, markWord(k){caps.markWord(k);},
+  focus(on){caps._prefs.focus=on;caps._applyFocus();}, panel(open){bar._panel.classList.toggle('vr-panel--hidden',!open);},
+  state(s){bar.setState(s);}, stop(){RUN=false;},
+  async read(loop){RUN=true;const S=chunk(PARA);
+    do{bar.show();caps.setChunks(S);caps.show();bar.setState('playing');
+      for(let i=0;i<S.length&&RUN;i++){caps.setActive(i);const w=S[i].split(/\s+/);for(let k=0;k<w.length&&RUN;k++){caps.markWord(k);await sleep(wordDur(w[k]));}}
+      bar.setState('idle');await sleep(1100);}while(loop&&RUN);
+  }};
+if(!location.hash.includes('manual')) window.demo.read(true);
+</script></body></html>

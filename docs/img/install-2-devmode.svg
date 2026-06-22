@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="-apple-system,Segoe UI,Arial,sans-serif">
+  <rect width="1200" height="750" fill="#f1f3f4"/>
+  <rect x="40" y="40" width="1120" height="670" rx="14" fill="#ffffff" stroke="#dadce0"/>
+  <rect x="40" y="40" width="1120" height="52" rx="14" fill="#dee1e6"/>
+  <rect x="40" y="70" width="1120" height="22" fill="#dee1e6"/>
+  <rect x="60" y="52" width="220" height="34" rx="8" fill="#ffffff"/>
+  <text x="80" y="74" font-size="14" fill="#3c4043">Extensions</text>
+  <rect x="60" y="104" width="1080" height="40" rx="20" fill="#f1f3f4"/>
+  <text x="86" y="129" font-size="15" fill="#3c4043">chrome://extensions</text>
+  <text x="80" y="210" font-size="26" font-weight="600" fill="#202124">Extensions</text>
+  <!-- developer mode toggle (ON) -->
+  <text x="940" y="206" font-size="16" fill="#3c4043">Developer mode</text>
+  <rect x="1060" y="192" width="48" height="24" rx="12" fill="#1a73e8"/>
+  <circle cx="1096" cy="204" r="9" fill="#ffffff"/>
+  <!-- revealed action row -->
+  <rect x="80" y="250" width="200" height="44" rx="22" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+  <text x="180" y="278" font-size="16" fill="#1a73e8" font-weight="600" text-anchor="middle">Load unpacked</text>
+  <rect x="300" y="250" width="190" height="44" rx="22" fill="#ffffff" stroke="#dadce0"/>
+  <text x="395" y="278" font-size="16" fill="#5f6368" text-anchor="middle">Pack extension</text>
+  <rect x="510" y="250" width="130" height="44" rx="22" fill="#ffffff" stroke="#dadce0"/>
+  <text x="575" y="278" font-size="16" fill="#5f6368" text-anchor="middle">Update</text>
+  <!-- arrow to load unpacked -->
+  <path d="M 300 380 C 240 380 200 330 180 300" fill="none" stroke="#1a73e8" stroke-width="4"/>
+  <path d="M 180 300 l -2 22 l 16 -10 z" fill="#1a73e8"/>
+  <text x="310" y="392" font-size="18" fill="#1a73e8" font-weight="600">לוחצים כאן</text>
+  <rect x="80" y="440" width="1040" height="150" rx="12" fill="#fafafd" stroke="#e8eaed"/>
+  <text x="600" y="520" font-size="18" fill="#9aa0a6" text-anchor="middle">מצב מפתח פעיל ✓</text>
+  <text x="1120" y="690" font-size="24" font-weight="700" fill="#202124" text-anchor="end" direction="rtl">שלב 2 — מפעילים מצב מפתח ולוחצים Load unpacked</text>
+</svg>

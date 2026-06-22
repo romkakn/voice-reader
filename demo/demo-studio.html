@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Reader — Demo Studio</title>
+<style>
+  /* ===== studio chrome ===== */
+  :root { --accent:#6a7bff; --accent2:#38e8ff; }
+  * { box-sizing: border-box; }
+  html,body { margin:0; height:100%; background:#0a0c12; color:#e8eefc;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Heebo, sans-serif; }
+  .studio { display:flex; flex-direction:column; align-items:center; gap:14px; padding:18px; min-height:100%; }
+  .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;
+    background:#11141d; border:1px solid #232838; border-radius:14px; padding:10px 14px; max-width:1280px; }
+  .toolbar button, .toolbar select {
+    all:unset; cursor:pointer; padding:8px 14px; border-radius:9px; font-size:14px; font-weight:600;
+    background:#1b2030; color:#dce6ff; border:1px solid #2b3346; transition:.15s; }
+  .toolbar button:hover { background:#242c40; border-color:#3a4566; }
+  .toolbar .primary { background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#06121f; border:none; }
+  .toolbar .rec { background:linear-gradient(135deg,#ff5d7a,#b14bff); color:#fff; border:none; }
+  .toolbar .hint { color:#8392ad; font-size:12px; font-weight:500; }
+  .toolbar .on { outline:2px solid var(--accent2); }
+
+  /* ===== 16:9 stage ===== */
+  .stage-wrap { width:min(1280px,96vw); aspect-ratio:16/9; position:relative; }
+  .stage {
+    position:absolute; inset:0; width:1280px; height:720px; transform-origin:top left;
+    border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 30px 80px rgba(0,0,0,.6);
+  }
+  /* each scene */
+  .scene { position:absolute; inset:0; opacity:0; visibility:hidden; transition:opacity .5s ease; }
+  .scene.show { opacity:1; visibility:visible; }
+
+  /* ---- intro / CTA cards ---- */
+  .card { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:18px; padding:80px;
+    background:radial-gradient(1200px 600px at 70% -10%, #1a2350, #0a0c12 60%); color:#eaf2ff; }
+  .card .kicker { font-size:18px; letter-spacing:.3em; text-transform:uppercase; color:#8fb6ff; font-weight:700; }
+  .card h1 { font-size:64px; line-height:1.05; margin:0; font-weight:800;
+    background:linear-gradient(120deg,#fff,#9fc0ff 60%,#c79bff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .card h2 { font-size:30px; margin:0; font-weight:600; color:#c4d2f0; max-width:900px; }
+  .card .feats { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:10px; }
+  .card .feat { background:rgba(120,150,255,.10); border:1px solid rgba(120,170,255,.25); border-radius:999px;
+    padding:10px 18px; font-size:18px; font-weight:600; color:#dbe6ff; }
+  .card .tag { font-size:18px; color:#7e8aa3; letter-spacing:.05em; }
+  .card .logo { font-size:22px; font-weight:800; color:#fff; display:flex; align-items:center; gap:10px; }
+  .card .logo .dot { width:14px; height:14px; border-radius:50%; background:linear-gradient(135deg,var(--accent2),var(--accent)); box-shadow:0 0 16px var(--accent); }
+  [contenteditable="true"] { outline:2px dashed rgba(120,180,255,.5); outline-offset:4px; border-radius:6px; }
+
+  /* ---- mock Claude docs page ---- */
+  .docs { position:absolute; inset:0; display:grid; grid-template-columns:240px 1fr; background:#fbfbfa; color:#1a1a1a; direction:ltr; }
+  .docs__side { background:#f4f3f0; border-right:1px solid #e7e5e0; padding:22px 18px; font-size:14px; }
+  .docs__brand { display:flex; align-items:center; gap:9px; font-weight:800; font-size:16px; color:#1a1a1a; margin-bottom:22px; }
+  .docs__brand .sq { width:18px; height:18px; border-radius:5px; background:#d97757; }
+  .docs__nav div { padding:7px 10px; border-radius:7px; color:#5c5a54; margin-bottom:2px; }
+  .docs__nav div.active { background:#eceae5; color:#1a1a1a; font-weight:600; }
+  .docs__main { padding:40px 56px; overflow:hidden; }
+  .docs__crumb { font-size:13px; color:#8a877f; margin-bottom:14px; }
+  .docs__main h1 { font-size:40px; margin:0 0 8px; font-weight:800; color:#141413; }
+  .docs__lead { font-size:18px; color:#6b6862; margin:0 0 26px; }
+  .docs__p { font-size:18px; line-height:1.85; color:#2b2a27; margin:0 0 20px; max-width:760px; }
+  .docs__p.sel { background:#cfe3ff; box-shadow:0 0 0 4px #cfe3ff; border-radius:4px; transition:background .3s; }
+
+  /* ---- fake cursor ---- */
+  .cursor { position:absolute; width:22px; height:22px; z-index:60; pointer-events:none;
+    transition:left .9s cubic-bezier(.4,0,.2,1), top .9s cubic-bezier(.4,0,.2,1); left:50%; top:50%; }
+  .cursor svg { filter:drop-shadow(0 2px 3px rgba(0,0,0,.4)); }
+
+  /* ---- fake context menu ---- */
+  .ctx { position:absolute; z-index:55; background:#fff; border:1px solid #e0ded8; border-radius:10px;
+    box-shadow:0 16px 40px rgba(0,0,0,.22); padding:6px; font-size:14px; color:#2b2a27; min-width:190px;
+    opacity:0; transform:translateY(-6px); transition:.18s; pointer-events:none; }
+  .ctx.show { opacity:1; transform:none; }
+  .ctx__item { padding:8px 12px; border-radius:7px; display:flex; align-items:center; gap:10px; }
+  .ctx__item .ic { width:16px; text-align:center; }
+  .ctx__item.parent { font-weight:600; }
+  .ctx__sub { margin-top:4px; border-top:1px solid #efeee9; padding-top:4px; }
+  .ctx__item.hot { background:#eef3ff; color:#2952cc; }
+
+  /* progress bar of the whole demo */
+  .prog { width:min(1280px,96vw); height:5px; background:#1b2030; border-radius:99px; overflow:hidden; }
+  .prog > i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent2),var(--accent)); }
+
+  /* ===== EMBEDDED REAL EXTENSION CSS (bar + captions) ===== */
+/* Voice Reader — floating control bar. Futuristic-minimal glass pill.
+   All selectors scoped under .vr-bar / .vr-panel; buttons reset with `all: unset`. */
+.vr-bar {
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 8px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, rgba(20, 24, 34, 0.82), rgba(12, 14, 20, 0.86));
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.16);
+  border-radius: 999px;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+    0 0 22px rgba(70, 150, 255, 0.10);
+  color: #eaf2ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  user-select: none;
+  cursor: grab;
+  opacity: 1;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  white-space: nowrap;
+}
+.vr-bar--dragging { cursor: grabbing; transition: none; box-shadow: 0 14px 44px rgba(0,0,0,0.55), 0 0 26px rgba(70,150,255,0.18); }
+
+.vr-bar--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* drag grip dots */
+.vr-bar__grip {
+  width: 10px; height: 18px; margin-left: 3px; flex: none;
+  background-image: radial-gradient(currentColor 1.1px, transparent 1.2px);
+  background-size: 5px 6px;
+  color: rgba(150, 190, 255, 0.45);
+  border-radius: 3px;
+}
+
+/* mode tag */
+.vr-bar__mode {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8fb6ff;
+}
+.vr-bar__mode:empty { display: none; }
+
+/* generic button reset */
+.vr-bar__btn {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #c8d6ee;
+  font-size: 14px;
+  transition: background 0.14s ease, color 0.14s ease, transform 0.08s ease;
+}
+.vr-bar__btn:hover { background: rgba(140, 190, 255, 0.14); color: #fff; }
+.vr-bar__btn:active { transform: scale(0.92); }
+
+/* play / pause — accent gradient orb */
+.vr-bar__play {
+  position: relative;
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #38e8ff, #6a7bff 70%, #a45bff);
+  color: #06121f;
+  box-shadow: 0 2px 10px rgba(74, 130, 255, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+}
+.vr-bar__play:hover { filter: brightness(1.08); }
+.vr-bar__play:active { transform: scale(0.94); }
+
+.vr-bar__ico { position: absolute; display: none; }
+.vr-bar__ico--play {
+  display: block; width: 0; height: 0;
+  border-style: solid; border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+  margin-left: 2px;
+}
+.vr-bar__ico--pause { gap: 3px; }
+.vr-bar__ico--pause i { display: block; width: 3px; height: 12px; background: currentColor; border-radius: 1px; }
+.vr-bar--playing .vr-bar__ico--play { display: none; }
+.vr-bar--playing .vr-bar__ico--pause { display: flex; }
+
+.vr-bar__ico--spin {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid rgba(6, 18, 31, 0.35); border-top-color: #06121f;
+  animation: vr-spin 0.7s linear infinite;
+}
+.vr-bar--loading .vr-bar__ico--play,
+.vr-bar--loading .vr-bar__ico--pause { display: none; }
+.vr-bar--loading .vr-bar__ico--spin { display: block; }
+@keyframes vr-spin { to { transform: rotate(360deg); } }
+
+/* speed cluster */
+.vr-bar__speed { display: inline-flex; align-items: center; gap: 2px; }
+.vr-bar__sd, .vr-bar__su { width: 24px; height: 24px; font-size: 15px; font-weight: 600; }
+.vr-bar__speed-label {
+  min-width: 38px; text-align: center;
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum";
+  font-size: 12.5px; font-weight: 600; color: #dce8ff;
+}
+
+.vr-bar__cc {
+  width: auto; padding: 0 7px; height: 22px; border-radius: 6px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.06em; color: #9fb2d4;
+  border: 1px solid rgba(140, 190, 255, 0.22);
+}
+.vr-bar__cc--on { color: #06121f; background: linear-gradient(135deg, #38e8ff, #6a7bff); border-color: transparent; }
+.vr-bar__cc--on:hover { color: #06121f; filter: brightness(1.08); }
+.vr-bar__gear { font-size: 15px; color: #9fb2d4; }
+.vr-bar__gear:hover { color: #fff; transform: rotate(45deg); }
+.vr-bar__sep { width: 1px; height: 18px; background: rgba(140, 190, 255, 0.18); margin: 0 1px; }
+.vr-bar__close { font-size: 11px; color: #7e8aa3; }
+.vr-bar__close:hover { color: #ff7a90; background: rgba(255, 122, 144, 0.14); }
+
+/* ---- settings panel (anchored above the bar) ------------------------------- */
+.vr-panel {
+  position: absolute;
+  left: 8px; right: 8px; bottom: calc(100% + 10px);
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(22, 26, 37, 0.96), rgba(13, 15, 22, 0.97));
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(70, 150, 255, 0.10);
+  cursor: default;
+}
+.vr-panel--hidden { display: none; }
+.vr-panel__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.vr-panel__row > span {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #93a6c6;
+}
+.vr-panel select {
+  all: unset;
+  flex: 1; max-width: 200px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(120, 190, 255, 0.22);
+  border-radius: 8px;
+  color: #eaf2ff; font-size: 12.5px; cursor: pointer;
+}
+.vr-panel select:hover { border-color: rgba(120, 190, 255, 0.4); }
+.vr-panel select option { background: #11151e; color: #eaf2ff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-bar, .vr-bar__btn { transition: none; }
+  .vr-bar__ico--spin { animation-duration: 1.2s; }
+}
+
+/* Voice Reader — live caption screen. Glass panel, draggable + resizable. */
+.vr-cap {
+  position: fixed;
+  z-index: 2147483646; /* just under the bar */
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  min-height: 120px;
+  max-width: 92vw;
+  max-height: 80vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  resize: both;
+  background: linear-gradient(180deg, rgba(18, 22, 32, 0.92), rgba(11, 13, 19, 0.94));
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(120, 190, 255, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 26px rgba(70, 150, 255, 0.10);
+  color: #eaf2ff;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  transition: opacity 0.18s ease;
+}
+.vr-cap--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.vr-cap--dragging { transition: none; }
+
+.vr-cap__head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(120, 190, 255, 0.12);
+  cursor: grab;
+  flex: none;
+}
+.vr-cap--dragging .vr-cap__head { cursor: grabbing; }
+.vr-cap__grip {
+  width: 10px; height: 16px; flex: none;
+  background-image: radial-gradient(rgba(150,190,255,0.5) 1.1px, transparent 1.2px);
+  background-size: 5px 6px; border-radius: 3px;
+}
+.vr-cap__title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #8fb6ff; margin-right: auto;
+}
+.vr-cap__tools { display: inline-flex; align-items: center; gap: 4px; }
+
+.vr-cap__btn {
+  all: unset; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 24px; min-width: 24px; padding: 0 6px;
+  border-radius: 6px; cursor: pointer;
+  color: #c8d6ee; font-size: 12px; font-weight: 600;
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.vr-cap__btn:hover { background: rgba(140, 190, 255, 0.16); color: #fff; }
+.vr-cap__close:hover { color: #ff7a90; background: rgba(255, 122, 144, 0.14); }
+
+.vr-cap__family {
+  all: unset; box-sizing: border-box;
+  height: 24px; padding: 0 6px;
+  background: rgba(10, 14, 22, 0.85);
+  border: 1px solid rgba(120, 190, 255, 0.22); border-radius: 6px;
+  color: #eaf2ff; font-size: 12px; cursor: pointer;
+}
+.vr-cap__family option { background: #11151e; color: #eaf2ff; }
+
+.vr-cap__body {
+  flex: 1; overflow-y: auto;
+  padding: 12px 14px;
+  font-size: 20px; line-height: 1.7;
+  -webkit-user-select: text; user-select: text;
+}
+.vr-cap__line {
+  padding: 4px 10px; margin: 2px 0;
+  border-radius: 8px; cursor: pointer;
+  color: #9fb0c9;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.vr-cap__line:hover { background: rgba(140, 190, 255, 0.10); color: #dce8ff; }
+.vr-cap__line--active {
+  color: #ffffff;
+  background: linear-gradient(90deg, rgba(74, 130, 255, 0.20), rgba(164, 91, 255, 0.12));
+  box-shadow: inset 3px 0 0 #38e8ff;
+}
+.vr-cap__w {
+  background: linear-gradient(180deg, #38e8ff, #6a7bff);
+  color: #06121f; border-radius: 4px; padding: 0 2px;
+}
+
+/* Word marking — minimal. Base word stays weight 500 (fixed width → no reflow).
+   The current word is a bold overlay (::after, absolute) shown by toggling opacity.
+   No shadow, no transform, no transition → instant, zero wobble/jank. */
+.vr-cap__line--active .vr-cap__wd { position: relative; font-weight: 500; }
+.vr-cap__line--active .vr-cap__wd::after {
+  content: attr(data-word);
+  position: absolute; left: 0; top: 0;
+  white-space: pre;
+  font-weight: 700;
+  color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+}
+.vr-cap__line--active .vr-cap__wd--read { color: #7f93b3; }
+.vr-cap__line--active .vr-cap__wd--now { color: transparent; }
+.vr-cap__line--active .vr-cap__wd--now::after { opacity: 1; }
+
+/* on-state for toggle buttons (focus) */
+.vr-cap__btn--on { color: #06121f; background: linear-gradient(135deg, #38e8ff, #6a7bff); }
+.vr-cap__btn--on:hover { color: #06121f; filter: brightness(1.08); }
+
+/* focus mode — show only the line being read, centered & large */
+.vr-cap--focus .vr-cap__line:not(.vr-cap__line--active) { display: none; }
+.vr-cap--focus .vr-cap__body { display: flex; align-items: center; justify-content: center; }
+.vr-cap--focus .vr-cap__line--active {
+  background: none; box-shadow: none; text-align: center;
+  font-size: 1.18em; line-height: 1.5; max-width: 100%;
+}
+
+.vr-cap__hint {
+  flex: none; padding: 6px 12px;
+  border-top: 1px solid rgba(120, 190, 255, 0.10);
+  font-size: 10.5px; color: #6f7e98; text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vr-cap, .vr-cap__line { transition: none; }
+}
+
+  /* keep the floating UI inside the stage, not the viewport */
+  .stage .vr-bar, .stage .vr-cap { position:absolute; }
+  /* captions read LTR over the English docs */
+  .stage .vr-cap__body, .stage .vr-cap__line { direction:ltr; text-align:left; }
+</style>
+</head>
+<body>
+<div class="studio">
+
+  <div class="toolbar">
+    <button class="primary" id="play">▶ נגן הדגמה</button>
+    <button class="rec" id="record">🎬 הקלט והורד וידאו</button>
+    <button id="edit">📝 עריכת טקסט</button>
+    <button id="reset">↺ איפוס</button>
+    <span class="hint">בהקלטה: בחר “הכרטיסייה הזו” + סמן “שיתוף אודיו של הכרטיסייה”</span>
+  </div>
+
+  <div class="prog"><i id="progbar"></i></div>
+
+  <div class="stage-wrap">
+    <div class="stage" id="stage">
+
+      <!-- SCENE 1: intro -->
+      <section class="scene" data-scene="intro">
+        <div class="card">
+          <div class="kicker" contenteditable="false" data-edit>VOICE READER · Chrome Extension</div>
+          <h1 contenteditable="false" data-edit>הקראה חכמה לכל עמוד</h1>
+          <h2 contenteditable="false" data-edit>סמן טקסט, לחץ נגן — והעמוד מוקרא לך בקול נוירוני, עם כתוביות חיות שמדגישות כל מילה.</h2>
+        </div>
+      </section>
+
+      <!-- SCENE 2: live demo over Claude docs -->
+      <section class="scene" data-scene="demo">
+        <div class="docs">
+          <aside class="docs__side">
+            <div class="docs__brand"><span class="sq"></span> Claude Docs</div>
+            <div class="docs__nav">
+              <div>Get started</div>
+              <div>Models</div>
+              <div class="active">Prompt caching</div>
+              <div>Tool use</div>
+              <div>Streaming</div>
+              <div>Vision</div>
+            </div>
+          </aside>
+          <main class="docs__main">
+            <div class="docs__crumb">Docs / Build with Claude / Prompt caching</div>
+            <h1 contenteditable="false" data-edit>Prompt caching</h1>
+            <p class="docs__lead" contenteditable="false" data-edit>Reuse large, static parts of your prompt across requests to cut cost and latency.</p>
+            <p class="docs__p" id="p1" contenteditable="false" data-edit>Prompt caching lets you reuse the same context across many requests. Instead of resending a long prompt every time, Claude stores it and reads it back in a fraction of the time.</p>
+            <p class="docs__p" id="p2" contenteditable="false" data-edit>It is ideal for long system prompts, documents, and tool definitions that stay the same between calls. You pay less, and responses start faster.</p>
+          </main>
+        </div>
+
+        <!-- fake cursor + context menu -->
+        <div class="cursor" id="cursor"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M2 2 L2 17 L6 13 L9 19 L12 18 L9 12 L15 12 Z" fill="#fff" stroke="#111" stroke-width="1.2"/></svg></div>
+        <div class="ctx" id="ctx">
+          <div class="ctx__item parent"><span class="ic">🔊</span> Voice Read</div>
+          <div class="ctx__sub">
+            <div class="ctx__item hot"><span class="ic">▸</span> Explanatory</div>
+            <div class="ctx__item"><span class="ic">▸</span> Storytelling</div>
+          </div>
+        </div>
+
+        <!-- REAL captions panel (recreated identically) -->
+        <div class="vr-cap vr-cap--hidden" id="cap" style="left:740px; top:150px; width:470px; height:360px;">
+          <div class="vr-cap__head">
+            <span class="vr-cap__grip"></span>
+            <span class="vr-cap__title">Captions</span>
+            <div class="vr-cap__tools">
+              <button class="vr-cap__btn">A−</button>
+              <button class="vr-cap__btn">A+</button>
+              <button class="vr-cap__btn vr-cap__focus" id="focusBtn">◎</button>
+              <button class="vr-cap__btn">✕</button>
+            </div>
+          </div>
+          <div class="vr-cap__body" id="capBody"></div>
+          <div class="vr-cap__hint">לחץ על שורה כדי להשמיע אותה שוב</div>
+        </div>
+
+        <!-- REAL control bar (recreated identically) -->
+        <div class="vr-bar vr-bar--hidden" id="bar" style="left:430px; top:650px;">
+          <span class="vr-bar__grip"></span>
+          <span class="vr-bar__mode">Explain</span>
+          <button class="vr-bar__btn vr-bar__play"><span class="vr-bar__ico vr-bar__ico--play"></span><span class="vr-bar__ico vr-bar__ico--pause"><i></i><i></i></span><span class="vr-bar__ico vr-bar__ico--spin"></span></button>
+          <div class="vr-bar__speed"><button class="vr-bar__btn vr-bar__sd">−</button><span class="vr-bar__speed-label">1.0x</span><button class="vr-bar__btn vr-bar__su">+</button></div>
+          <button class="vr-bar__btn vr-bar__cc vr-bar__cc--on">CC</button>
+          <button class="vr-bar__btn vr-bar__gear">⚙</button>
+          <span class="vr-bar__sep"></span>
+          <button class="vr-bar__btn vr-bar__close">✕</button>
+        </div>
+      </section>
+
+      <!-- SCENE 3: features -->
+      <section class="scene" data-scene="feats">
+        <div class="card">
+          <div class="kicker" data-edit>מה הופך אותו לשונה</div>
+          <h1 style="font-size:48px" data-edit>טכנולוגיה שלא תמצא במקום אחר</h1>
+          <div class="feats">
+            <span class="feat" data-edit>🧠 קול נוירוני מקומי (Piper · WASM)</span>
+            <span class="feat" data-edit>🎬 כתוביות חיות בסנכרון מילה־מילה</span>
+            <span class="feat" data-edit>🎯 מצב פוקוס</span>
+            <span class="feat" data-edit>🔁 השמעה חוזרת בקליק</span>
+            <span class="feat" data-edit>⚡ עובד אופליין · בלי שרת</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 4: CTA -->
+      <section class="scene" data-scene="cta">
+        <div class="card">
+          <div class="logo"><span class="dot"></span> Voice Reader</div>
+          <h1 style="font-size:54px" data-edit>הקריאה שלך, נוחה יותר</h1>
+          <h2 data-edit>תוסף Chrome חינמי להקראת טקסט והבנה טובה יותר של מידע.</h2>
+          <div class="tag" data-edit>#WebDev #ChromeExtension #Accessibility #AI #TTS</div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   Voice Reader — Demo Studio
+   Edit text on screen (📝), press ▶ to preview, 🎬 to record a .webm.
+   Narration uses the browser Web Speech API (real voice).
+   ========================================================================= */
+
+// ---- fit the fixed 1280x720 stage into the responsive wrapper ----
+const stage = document.getElementById('stage');
+function fit() {
+  const wrap = stage.parentElement;
+  const s = wrap.clientWidth / 1280;
+  stage.style.transform = 'scale(' + s + ')';
+  wrap.style.height = (720 * s) + 'px';
+}
+addEventListener('resize', fit); fit();
+
+const $ = (s, r=document) => r.querySelector(s);
+const scenes = [...document.querySelectorAll('.scene')];
+const showScene = (name) => scenes.forEach(s => s.classList.toggle('show', s.dataset.scene === name));
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
+const progbar = $('#progbar');
+
+// ---- editing mode ----
+let editing = false;
+$('#edit').onclick = () => {
+  editing = !editing;
+  document.querySelectorAll('[data-edit]').forEach(el => el.setAttribute('contenteditable', editing));
+  $('#edit').classList.toggle('on', editing);
+  $('#edit').textContent = editing ? '✓ סיום עריכה' : '📝 עריכת טקסט';
+  if (editing) showScene('intro');
+};
+
+// ---- voices ----
+let voice = null;
+function pickVoice() {
+  const vs = speechSynthesis.getVoices();
+  voice = vs.find(v => v.localService && /^en(-|_)/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || vs[0] || null;
+}
+speechSynthesis.onvoiceschanged = pickVoice; pickVoice();
+
+// ---- captions renderer (mirrors the real extension) ----
+const capBody = $('#capBody');
+let lineEls = [], wordAt = -1, activeLine = -1;
+function splitSentences(t) {
+  return (t.match(/[^.!?]+[.!?]+/g) || [t]).map(s => s.trim()).filter(Boolean);
+}
+function setChunks(sentences) {
+  capBody.innerHTML = ''; lineEls = []; activeLine = -1;
+  sentences.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'vr-cap__line'; d.dataset.i = i; d.textContent = s;
+    capBody.appendChild(d); lineEls.push({ el: d, text: s });
+  });
+}
+function renderWords(line) {
+  const t = line.text, re = /\S+/g; let m, last = 0, html = '';
+  while ((m = re.exec(t)) !== null) {
+    html += t.slice(last, m.index).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const w = m[0].replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    html += '<span class="vr-cap__wd" data-word="'+w+'">'+w+'</span>';
+    last = m.index + m[0].length;
+  }
+  html += t.slice(last);
+  line.el.innerHTML = html;
+  line.wordEls = line.el.querySelectorAll('.vr-cap__wd');
+}
+function setActive(i) {
+  if (i === activeLine) return;
+  const prev = lineEls[activeLine];
+  if (prev) { prev.el.classList.remove('vr-cap__line--active'); prev.el.textContent = prev.text; }
+  activeLine = i; wordAt = -1;
+  const cur = lineEls[i]; if (!cur) return;
+  cur.el.classList.add('vr-cap__line--active'); renderWords(cur);
+  cur.el.scrollIntoView({ block:'center' });
+}
+function markWord(idx) {                       // monotonic forward-only
+  const cur = lineEls[activeLine]; if (!cur || !cur.wordEls) return;
+  const N = cur.wordEls.length;
+  if (idx < 0 || idx >= N || idx <= wordAt) return;
+  if (wordAt >= 0) cur.wordEls[wordAt].classList.remove('vr-cap__wd--now');
+  for (let k = Math.max(0, wordAt); k < idx; k++) {
+    cur.wordEls[k].classList.add('vr-cap__wd--read');
+    cur.wordEls[k].classList.remove('vr-cap__wd--now');
+  }
+  cur.wordEls[idx].classList.add('vr-cap__wd--now');
+  cur.wordEls[idx].classList.remove('vr-cap__wd--read');
+  wordAt = idx;
+}
+
+// speak one sentence; resolve when it ends. Highlights words via boundaries.
+function speakSentence(i, text, rate=1) {
+  return new Promise((resolve) => {
+    setActive(i);
+    const u = new SpeechSynthesisUtterance(text);
+    if (voice) u.voice = voice;
+    u.rate = rate;
+    const words = text.split(/\s+/).filter(Boolean);
+    let wi = 0;
+    u.onboundary = (e) => {
+      if (e.name === 'word' || e.charIndex != null) {
+        // map charIndex -> word index
+        let acc = 0, idx = 0;
+        for (let k = 0; k < words.length; k++) { if (e.charIndex <= acc) { idx = k; break; } acc += words[k].length + 1; idx = k; }
+        markWord(idx);
+      }
+    };
+    // fallback timer in case boundaries are sparse
+    let t = setInterval(() => { if (wi < words.length) markWord(wi++); }, Math.max(150, 300/rate));
+    u.onend = () => { clearInterval(t); for (let k=0;k<words.length;k++) markWord(k); resolve(); };
+    u.onerror = () => { clearInterval(t); resolve(); };
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  });
+}
+
+// ---- the demo timeline ----
+let running = false;
+const bar = $('#bar'), cap = $('#cap'), cursor = $('#cursor'), ctx = $('#ctx'), p1 = $('#p1'), focusBtn = $('#focusBtn');
+
+function resetDemo() {
+  speechSynthesis.cancel();
+  bar.classList.add('vr-bar--hidden'); cap.classList.add('vr-cap--hidden');
+  cap.classList.remove('vr-cap--focus'); ctx.classList.remove('show');
+  p1.classList.remove('sel'); capBody.innerHTML=''; lineEls=[]; activeLine=-1; wordAt=-1;
+  progbar.style.width='0%'; showScene('intro');
+}
+$('#reset').onclick = resetDemo;
+
+async function playDemo() {
+  if (running) return; running = true;
+  resetDemo();
+  const setP = (v) => progbar.style.width = v + '%';
+
+  // SCENE 1 — intro
+  showScene('intro'); setP(4); await wait(2600);
+
+  // SCENE 2 — docs + selection
+  showScene('demo'); await wait(500); setP(12);
+  cursor.style.left = '470px'; cursor.style.top = '470px'; await wait(900);
+  p1.classList.add('sel'); setP(20); await wait(900);
+
+  // context menu
+  ctx.style.left = '470px'; ctx.style.top = '500px';
+  ctx.classList.add('show'); await wait(1100); setP(28);
+  ctx.classList.remove('show');
+
+  // bar + captions appear
+  bar.classList.remove('vr-bar--hidden');
+  const sentences = splitSentences(p1.textContent.trim());
+  setChunks(sentences);
+  cap.classList.remove('vr-cap--hidden');
+  bar.classList.add('vr-bar--playing');
+  await wait(700); setP(34);
+
+  // narrate sentence 1
+  await speakSentence(0, sentences[0], 1); setP(52);
+
+  // focus mode ON mid-read
+  cap.classList.add('vr-cap--focus'); focusBtn.classList.add('vr-cap__btn--on');
+  await wait(500);
+  if (sentences[1]) await speakSentence(1, sentences[1], 1);
+  setP(72);
+  cap.classList.remove('vr-cap--focus'); focusBtn.classList.remove('vr-cap__btn--on');
+  await wait(400);
+
+  // replay first sentence (click)
+  const l0 = lineEls[0]; if (l0) { l0.el.style.background='rgba(140,190,255,.18)'; }
+  await wait(400);
+  await speakSentence(0, sentences[0], 1.15);
+  if (l0) l0.el.style.background='';
+  setP(84);
+  bar.classList.remove('vr-bar--playing');
+  await wait(500);
+
+  // SCENE 3 — features
+  showScene('feats'); setP(92); await wait(3000);
+
+  // SCENE 4 — CTA
+  showScene('cta'); setP(100); await wait(3200);
+
+  running = false;
+}
+$('#play').onclick = () => { if (!running) playDemo(); };
+
+// ---- one-button record to .webm (screen capture of this tab + audio) ----
+$('#record').onclick = async () => {
+  if (running) return;
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 30, width: 1280, height: 720 },
+      audio: true
+    });
+  } catch (e) { alert('ההקלטה בוטלה. נסה שוב ובחר את הכרטיסייה הזו.'); return; }
+
+  // mix a soft Web-Audio pad so the file always has audio, even if tab-audio off
+  let mixed = stream;
+  try {
+    const ac = new (window.AudioContext||window.webkitAudioContext)();
+    const dest = ac.createMediaStreamDestination();
+    const osc = ac.createOscillator(), g = ac.createGain();
+    osc.type='sine'; osc.frequency.value=110; g.gain.value=0.0015; // near-silent bed
+    osc.connect(g).connect(dest); osc.start();
+    // combine display audio (if any) + pad
+    const tracks = [...stream.getVideoTracks(), ...stream.getAudioTracks(), ...dest.stream.getAudioTracks()];
+    mixed = new MediaStream(tracks);
+  } catch(e) {}
+
+  const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') ? 'video/webm;codecs=vp9,opus' : 'video/webm';
+  const rec = new MediaRecorder(mixed, { mimeType: mime, videoBitsPerSecond: 6_000_000 });
+  const chunks = [];
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+  rec.onstop = () => {
+    const blob = new Blob(chunks, { type:'video/webm' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'voice-reader-demo.webm';
+    a.click();
+    stream.getTracks().forEach(t => t.stop());
+  };
+  // if the user stops sharing from the browser UI, finalize
+  stream.getVideoTracks()[0].addEventListener('ended', () => { if (rec.state !== 'inactive') rec.stop(); });
+
+  rec.start();
+  await playDemo();
+  await wait(400);
+  if (rec.state !== 'inactive') rec.stop();
+};
+
+// start on intro
+resetDemo();
+</script>
+</body>
+</html>
