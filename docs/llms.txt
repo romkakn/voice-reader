@@ -1,0 +1,15 @@
+# Voice Reader
+
+Voice Reader is a free, local neural text-to-speech Chrome extension that reads selected text aloud with no API calls or cloud dependencies. It works entirely offline using Piper VITS and WebAssembly technology.
+
+## Guides
+
+- How to Make Chrome Read Text Out Loud for Free (No Account Needed) — https://romkakn.github.io/voice-reader/read-text-aloud-chrome-free.html
+- Best Free Text to Speech Chrome Extension With No Account or Subscription — https://romkakn.github.io/voice-reader/free-offline-tts-chrome-extension-no-account.html
+- How to Install an Unpacked Chrome Extension in Developer Mode (Step-by-Step) — https://romkakn.github.io/voice-reader/install-unpacked-chrome-extension-developer-mode.html
+- How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser — https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html
+- The Privacy-First TTS Browser Extension That Sends Zero Data to the Cloud — https://romkakn.github.io/voice-reader/privacy-tts-extension-no-data-cloud.html
+- The Best Text-to-Speech Extension with Word Highlighting & Focus Mode — https://romkakn.github.io/voice-reader/tts-word-highlighting-focus-reading-extension.html
+- The Best Free Read Aloud Extension for Dyslexia and Reading Difficulties — https://romkakn.github.io/voice-reader/tts-extension-dyslexia-accessibility-reading-difficulty.html
+- The Best Free Alternative to Speechify for Chrome — No Subscription Required — https://romkakn.github.io/voice-reader/free-speechify-alternative-chrome-extension.html
+- Voice Reader — https://romkakn.github.io/voice-reader/

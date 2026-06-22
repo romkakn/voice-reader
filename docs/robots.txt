@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://romkakn.github.io/voice-reader/sitemap.xml

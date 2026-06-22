@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Reader — Free Chrome Extension That Reads Any Text Aloud</title>
+    <meta name="description" content="Free text-to-speech Chrome extension. Read any text aloud with privacy-first offline neural TTS. No account, no subscription, no data tracking.">
+    <link rel="canonical" href="https://romkakn.github.io/voice-reader/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Voice Reader — Free Chrome Extension That Reads Any Text Aloud">
+    <meta property="og:description" content="Free text-to-speech Chrome extension. Read any text aloud with privacy-first offline neural TTS. No account, no subscription, no data tracking.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://romkakn.github.io/voice-reader/">
+    <meta property="og:image" content="https://romkakn.github.io/voice-reader/img/voice-reader-og.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Voice Reader — Free Chrome Extension That Reads Any Text Aloud">
+    <meta name="twitter:description" content="Free text-to-speech Chrome extension. Read any text aloud with privacy-first offline neural TTS. No account, no subscription, no data tracking.">
+    <meta name="twitter:image" content="https://romkakn.github.io/voice-reader/img/voice-reader-og.png">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #fff;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 1rem 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        header .tagline {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 0.9rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        nav ul {
+            list-style: none;
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #000;
+            line-height: 1.3;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #000;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: #222;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: "Courier New", monospace;
+            font-size: 0.9em;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 600px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header .tagline {
+                font-size: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav li {
+                margin-bottom: 0;
+            }
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-card h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .related-guides {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .related-guides h3 {
+            margin-top: 0;
+        }
+
+        .related-guides ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .related-guides li {
+            margin-bottom: 0.8rem;
+        }
+
+        footer {
+            background: #f8f9fa;
+            border-top: 1px solid #ddd;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "Voice Reader",
+          "url": "https://romkakn.github.io/voice-reader/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://romkakn.github.io/voice-reader/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Voice Reader",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Chrome",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "url": "https://romkakn.github.io/voice-reader/"
+        },
+        {
+          "@type": "Organization",
+          "name": "Voice Reader",
+          "url": "https://romkakn.github.io/voice-reader/",
+          "logo": "https://romkakn.github.io/voice-reader/img/voice-reader-og.png"
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Voice Reader</h1>
+        <p class="tagline">Free text-to-speech Chrome extension — no account, no cloud, no paywall</p>
+        <a href="https://romkakn.github.io/voice-reader/" class="cta-button">Get it free on GitHub</a>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="read-text-aloud-chrome-free.html">How to Read Text Aloud</a></li>
+            <li><a href="free-offline-tts-chrome-extension-no-account.html">Best Free TTS Extension</a></li>
+            <li><a href="install-unpacked-chrome-extension-developer-mode.html">Install Unpacked</a></li>
+            <li><a href="offline-neural-tts-browser-piper-webassembly.html">How It Works</a></li>
+            <li><a href="privacy-tts-extension-no-data-cloud.html">Privacy First</a></li>
+            <li><a href="tts-word-highlighting-focus-reading-extension.html">Word Highlighting</a></li>
+            <li><a href="tts-extension-dyslexia-accessibility-reading-difficulty.html">For Dyslexia</a></li>
+            <li><a href="free-speechify-alternative-chrome-extension.html">vs Speechify</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>What it does</h2>
+        <p>You've got a 40-page spec open, or a Wikipedia rabbit hole you've been staring at for an hour. Voice Reader lets you select any text on any page, right-click → Voice Read, and just listen. The whole thing runs offline — no text leaves your machine, no account to create, no subscription to forget to cancel.</p>
+
+        <p>It's a free Chrome extension built on Piper VITS, a neural voice model that runs in your browser via WebAssembly. The voice model downloads once (~63 MB) and stays local after that.</p>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>Completely Free</h3>
+                <p>No tiers, no trial periods, no "upgrade to unlock speed control." Open source, full stop.</p>
+            </div>
+            <div class="feature-card">
+                <h3>100% Private</h3>
+                <p>Everything runs offline. Your text never touches a server — not even for analytics. There's nothing to opt out of.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Neural Quality</h3>
+                <p>Piper VITS via WebAssembly. It sounds like a person, not a phone tree. Runs directly in the browser tab.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Accessible</h3>
+                <p>Word highlighting follows along in real time, which helps a lot if you have dyslexia or just lose your place easily in dense text.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Easy to Install</h3>
+                <p>Go to <code>chrome://extensions</code>, flip on Developer mode, click "Load unpacked." Done in under two minutes.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Open Source</h3>
+                <p>The code is on GitHub. Read it, fork it, or open a PR. Nothing is hidden.</p>
+            </div>
+        </div>
+
+        <h2>Getting started</h2>
+        <ol>
+            <li>Clone or download the Voice Reader repo from GitHub</li>
+            <li>Open Chrome and go to <code>chrome://extensions</code></li>
+            <li>Toggle Developer Mode on (top-right corner)</li>
+            <li>Click "Load unpacked" and point it at the Voice Reader folder</li>
+            <li>Select any text on a page and click the Voice Reader icon — or right-click and choose Voice Read</li>
+        </ol>
+        <p>First run downloads the voice model (~63 MB, one-time). After that it works offline entirely.</p>
+        <p>Want screenshots of every step? <a href="install-unpacked-chrome-extension-developer-mode.html">See the full install guide</a>.</p>
+
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Select &amp; Listen:</strong> Highlight any text and hear it read aloud immediately</li>
+            <li><strong>Word Highlighting:</strong> Each word lights up as it's spoken — useful for following along in long docs</li>
+            <li><strong>Focus Mode:</strong> Strips out the surrounding page so you can concentrate on what's being read</li>
+            <li><strong>Speed Control:</strong> Slow it down for a foreign language, speed it up for content you're already familiar with</li>
+            <li><strong>Multiple Voices:</strong> Pick the voice that's easiest on your ears</li>
+            <li><strong>Offline First:</strong> No internet required after the initial model download</li>
+        </ul>
+
+        <h2>Who uses it</h2>
+        <ul>
+            <li>Getting through long articles or documentation without eye strain</li>
+            <li>Studying — hearing something while reading it helps retention for a lot of people</li>
+            <li>Dyslexia and other reading difficulties (word highlighting especially)</li>
+            <li>Language learning: hear correct pronunciation while reading</li>
+            <li>Listening while doing something else — cooking, commuting with a laptop, whatever</li>
+        </ul>
+
+        <h2>How the offline part actually works</h2>
+        <p>Voice Reader uses <strong>Piper VITS</strong>, a neural text-to-speech engine originally built for low-resource hardware. Combined with <strong>WebAssembly</strong>, the model runs inside the browser itself — no external API calls, no round trips to any server. Your text goes in, audio comes out, all locally.</p>
+        <p>The technical details are in the <a href="offline-neural-tts-browser-piper-webassembly.html">Piper + WebAssembly explainer</a>.</p>
+
+        <h2>Privacy</h2>
+        <p>Voice Reader has no telemetry, no analytics, and no network requests tied to your usage. It can't log what you read because it never sees it — everything stays in the browser tab.</p>
+        <ul>
+            <li>Runs 100% offline after model download</li>
+            <li>No data sent to any server, ever</li>
+            <li>No account or login required</li>
+            <li>Nothing stored in the cloud</li>
+        </ul>
+        <p><a href="privacy-tts-extension-no-data-cloud.html">Full privacy details here.</a></p>
+
+        <h2>Why not just use Speechify?</h2>
+        <p>Speechify's free tier caps how much you can listen to per month, and the paid plan runs $139/year. Voice Reader is free, open source, and doesn't gate any features. The audio quality is comparable — both use neural voices. The difference is one sends your text to their servers; the other doesn't.</p>
+        <p><a href="free-speechify-alternative-chrome-extension.html">Side-by-side comparison with Speechify and other paid alternatives</a>.</p>
+
+        <div class="related-guides">
+            <h3>Guides &amp; Resources</h3>
+            <ul>
+                <li><a href="read-text-aloud-chrome-free.html">How to Make Chrome Read Text Out Loud for Free (No Account Needed)</a></li>
+                <li><a href="free-offline-tts-chrome-extension-no-account.html">Best Free Text to Speech Chrome Extension With No Account or Subscription</a></li>
+                <li><a href="install-unpacked-chrome-extension-developer-mode.html">How to Install an Unpacked Chrome Extension in Developer Mode (Step-by-Step)</a></li>
+                <li><a href="offline-neural-tts-browser-piper-webassembly.html">How Piper VITS and WebAssembly Power Offline Neural TTS in Your Browser</a></li>
+                <li><a href="privacy-tts-extension-no-data-cloud.html">The Privacy-First TTS Browser Extension That Sends Zero Data to the Cloud</a></li>
+                <li><a href="tts-word-highlighting-focus-reading-extension.html">The Best Text-to-Speech Extension with Word Highlighting &amp; Focus Mode</a></li>
+                <li><a href="tts-extension-dyslexia-accessibility-reading-difficulty.html">The Best Free Read Aloud Extension for Dyslexia and Reading Difficulties</a></li>
+                <li><a href="free-speechify-alternative-chrome-extension.html">The Best Free Alternative to Speechify for Chrome — No Subscription Required</a></li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p><a href="https://github.com/romkakn/voice-reader">Open source on GitHub</a> · MV3 · Runs locally</p>
+    </footer>
+</body>
+</html>
