@@ -2,8 +2,19 @@
 
 Select any text on the web and listen to it read aloud with customizable voice, speed, and tone.
 
+> 🌐 **Website & guides:** https://romkakn.github.io/voice-reader/
 > 🇮🇱 **מדריך התקנה בעברית (לא-מתכנתים):** ראו [`INSTALL.md`](INSTALL.md) — כולל צילומי מסך וצעד-אחר-צעד.
 > 🔒 **אבטחה ופרטיות:** ראו [`SECURITY.md`](SECURITY.md).
+
+### 📚 Guides
+- [Make Chrome read text out loud (free)](https://romkakn.github.io/voice-reader/read-text-aloud-chrome-free.html)
+- [Free TTS Chrome extension — no account](https://romkakn.github.io/voice-reader/free-offline-tts-chrome-extension-no-account.html)
+- [Install an unpacked extension (Developer mode)](https://romkakn.github.io/voice-reader/install-unpacked-chrome-extension-developer-mode.html)
+- [Offline neural TTS with Piper + WebAssembly](https://romkakn.github.io/voice-reader/offline-neural-tts-browser-piper-webassembly.html)
+- [Privacy-first TTS — zero data to the cloud](https://romkakn.github.io/voice-reader/privacy-tts-extension-no-data-cloud.html)
+- [Word highlighting & focus mode](https://romkakn.github.io/voice-reader/tts-word-highlighting-focus-reading-extension.html)
+- [Read-aloud for dyslexia & reading difficulty](https://romkakn.github.io/voice-reader/tts-extension-dyslexia-accessibility-reading-difficulty.html)
+- [Free Speechify alternative for Chrome](https://romkakn.github.io/voice-reader/free-speechify-alternative-chrome-extension.html)
 
 ## Installation
 
