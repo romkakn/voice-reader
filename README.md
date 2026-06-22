@@ -1,6 +1,12 @@
 # Voice Reader
 
-Select any text on the web and listen to it read aloud with customizable voice, speed, and tone.
+Free, open-source Chrome extension that reads selected text aloud with a natural neural voice — text to speech that runs offline, right in your browser.
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Manifest V3](https://img.shields.io/badge/manifest-v3-blue.svg)](#installation)
+[![No dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](#)
+[![Runs locally](https://img.shields.io/badge/runs-locally-orange.svg)](#neural-voices-piper)
+[![Neural TTS: Piper](https://img.shields.io/badge/neural%20TTS-Piper-purple.svg)](#neural-voices-piper)
 
 > 🌐 **Website & guides:** https://romkakn.github.io/voice-reader/
 > 🇮🇱 **מדריך התקנה בעברית (לא-מתכנתים):** ראו [`INSTALL.md`](INSTALL.md) — כולל צילומי מסך וצעד-אחר-צעד.
@@ -16,67 +22,62 @@ Select any text on the web and listen to it read aloud with customizable voice, 
 - [Read-aloud for dyslexia & reading difficulty](https://romkakn.github.io/voice-reader/tts-extension-dyslexia-accessibility-reading-difficulty.html)
 - [Free Speechify alternative for Chrome](https://romkakn.github.io/voice-reader/free-speechify-alternative-chrome-extension.html)
 
+## Why Voice Reader?
+
+You highlight a paragraph, right-click, and hear it. That's the whole idea. Voice Reader is a free text to speech Chrome extension that reads web pages aloud using a natural neural voice (Piper VITS) compiled to WebAssembly. The voice generation happens on your machine, so there's no API key, no account, and no subscription. After a one-time voice download (~63MB) it keeps working offline.
+
+Most read-aloud tools ship your text to a server. This one doesn't. If you've looked at Speechify and balked at the paywall, Voice Reader is a free alternative that stays on your device. When a neural voice isn't loaded yet, it falls back to your browser's built-in Web Speech API so you're never stuck.
+
+## Features
+
+| Feature | What it does |
+| --- | --- |
+| Neural voice (Piper VITS) | Generates natural speech locally via WebAssembly — no cloud round-trip |
+| Web Speech fallback | Uses the browser's built-in voices when no neural voice is loaded |
+| Right-click to read | Select text, right-click, and listen to it on any page |
+| Voice modes | Switch between Explanatory and Storytelling tone |
+| Floating control bar | Draggable bar for play, pause, speed, and mode |
+| Synced captions | Live captions with karaoke-style word highlighting |
+| Focus mode | Surfaces one sentence at a time to cut distraction |
+| Click-to-replay | Tap any word or sentence to hear it again |
+| Adjustable speed | Slow down or speed up reading to taste |
+| Offline after setup | Works with no connection once the voice is downloaded |
+
+## Use cases
+
+- Listen to long documentation instead of scrolling through it (Claude docs, Google Cloud, API references)
+- Read Wikipedia articles aloud while you do something else
+- Get through dense English articles when reading them is slow going
+- Dyslexia-friendly reading help and general accessibility support
+- Study by listening — let your ears carry the load when your eyes are tired
+- Reduce reading fatigue on long sessions
+- Multitask: cook, walk, or commute while a page reads itself to you
+
 ## Installation
 
-1. Open `chrome://extensions/` in Chrome
-2. Enable **Developer mode** (toggle in top-right)
-3. Click **Load unpacked**
-4. Select the `voice-reader` folder
-5. The extension appears in your Chrome toolbar
+1. Download or clone this repository.
+2. Open `chrome://extensions` in Chrome (or Edge, Brave, Opera).
+3. Turn on **Developer mode** (top-right toggle).
+4. Click **Load unpacked** and pick the extension folder.
+5. Pin Voice Reader to your toolbar.
+
+New to unpacked extensions? The [step-by-step guide](https://romkakn.github.io/voice-reader/install-unpacked-chrome-extension-developer-mode.html) walks through it with screenshots. Hebrew speakers can follow [`INSTALL.md`](INSTALL.md).
 
 ## Usage
 
-1. Select text anywhere on any webpage
-2. Right-click and choose:
-   - **Read (Explanatory)** — Clear, measured voice for learning
-   - **Read (Storytelling)** — Engaging, expressive voice for narrative
-3. A floating control bar appears with:
-   - **Play/Pause** button
-   - **Speed slider** — Adjust playback speed on the fly
-   - **Stop** button to cancel
-4. Open extension options to customize voices, rate, and pitch per mode
-
-## File Map
-
-```
-voice-reader/
-├── manifest.json              # MV3 extension config
-├── README.md                  # This file
-├── src/
-│   ├── background.js          # Service worker (context menu, messaging)
-│   ├── content.js             # Page injection, message listener
-│   ├── lib/
-│   │   └── chunker.js         # Text → sentence chunks for TTS queueing
-│   ├── tts/
-│   │   ├── engine.js          # TTSEngine base class
-│   │   └── webspeech.js       # WebSpeechEngine (Web Speech API impl)
-│   └── ui/
-│       ├── bar.js             # Bar controller class
-│       └── bar.css            # Floating control bar styles
-└── src/options/
-    └── options.html           # Settings page (voice/rate/pitch per mode)
-```
-
-## Architecture
-
-- **No build step** — all scripts load as classic globals via manifest
-- **Window.VR namespace** — all modules attach to `window.VR` for cross-script access
-- **Chrome storage** — syncs settings across devices (key: `vr_settings`)
-- **Web Speech API** — uses native browser TTS with fallback voices
+1. Select any text on a web page.
+2. Right-click and choose **Read aloud** (or use the floating control bar).
+3. Adjust speed, switch voice mode, or turn on focus mode from the bar.
+4. Click a highlighted word to replay from there.
 
 ## Neural voices (Piper)
 
-Voice Reader includes an optional neural TTS engine powered by [Piper](https://github.com/rhasspy/piper) running locally via WebAssembly — no cloud, no subscription.
+Voice Reader uses [Piper](https://github.com/rhasspy/piper) VITS models compiled to WebAssembly. The first time you pick a neural voice, the extension downloads the model once (~63MB) and caches it. After that, every word is synthesized on your device — nothing leaves the browser, and it works with no internet connection. If a neural voice isn't ready, the Web Speech API handles playback so reading never blocks.
 
-**First-run download:** the selected voice model (~63–75 MB for medium quality) is fetched from HuggingFace on first use and cached in the browser's Origin Private File System (OPFS). Subsequent reads are fully offline and near-instant.
+## License
 
-**Internet requirement:** only needed once per voice, for the initial model download. After that the extension works offline.
+MIT — see [`LICENSE`](LICENSE). Zero runtime dependencies; everything is vendored.
 
-**Switching engine or voice:**
-1. Click the Voice Reader icon → **Options** (or right-click → *Extension options*)
-2. Under **Engine**, choose:
-   - *Auto* — uses Piper neural TTS; falls back to system voices if model fails to load
-   - *Neural (Piper)* — always use Piper; error shown if unavailable
-   - *System* — use the browser's built-in Web Speech API voices (original behaviour)
-3. Under **Neural voice**, pick a voice ID (e.g. `en_US-hfc_female-medium`, `en_US-lessac-high`)
-4. Save — takes effect on the next read action
+## Keywords
+
+free text to speech chrome extension, read web pages aloud, offline neural TTS, Piper VITS WebAssembly, read selected text aloud, no API key text to speech, Speechify alternative free, read aloud browser extension, accessibility reading tool, dyslexia reading help, screen reader alternative, privacy-first TTS, Manifest V3 extension, Edge Brave Opera text to speech, karaoke word highlighting, focus reading mode
